@@ -8,6 +8,7 @@
 #ifndef __NUMBER_THEORY_H__
 #define __NUMBER_THEORY_H__
 
+#include "cil_config.h"
 #include <cstring>
 #include <cmath>
 #include <vector>
@@ -20,11 +21,15 @@
 
 // gcd, greatest common divisor
 template<typename T> T gcd(T a, T b);
+#ifdef __cpp11
 template<typename T, typename ...Args> T gcd(T a, T b, Args... rest);
+#endif
 
 // lcm, lowest common multiple
 template<typename T> T lcm(T a, T b);
+#ifdef __cpp11
 template<typename T, typename ...Args> T lcm(T a, T b, Args... rest);
+#endif
 
 // extend gcd
 template<typename T> T egcd(T a, T b, T& x, T& y);
@@ -111,20 +116,24 @@ inline T gcd(T a, T b) {
 	}
 	return a;
 }
+#ifdef __cpp11
 template<typename T, typename ...Args>
 inline T gcd(T a, T b, Args... rest) {
 	return gcd(gcd(a, b), rest...);
 }
+#endif
 
 // lcm, lowest common multiple
 template<typename T>
 inline T lcm(T a, T b) {
 	return a / gcd(a, b) * b;
 }
+#ifdef __cpp11
 template<typename T, typename ...Args>
 inline T lcm(T a, T b, Args... rest) {
 	return lcm(lcm(a, b), rest...);
 }
+#endif
 
 // extend gcd
 template<typename T>
