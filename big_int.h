@@ -372,26 +372,26 @@ inline istream& operator >> (istream &is, big_int &b) { string s; is >> s; b = b
 inline ostream& operator << (ostream &os, const big_int &b) { os << b.to_string(); return os; }
 
 // operators overwrite
-big_int operator + (int a, const big_int& b) { return big_int(a) + b; }
-big_int operator + (unsigned int a, const big_int& b) { return big_int(a) + b; }
-big_int operator + (long long a, const big_int& b) { return big_int(a) + b; }
-big_int operator + (unsigned long long a, const big_int& b) { return big_int(a) + b; }
-big_int operator - (int a, const big_int& b) { return big_int(a) - b; }
-big_int operator - (unsigned int a, const big_int& b) { return big_int(a) - b; }
-big_int operator - (long long a, const big_int& b) { return big_int(a) - b; }
-big_int operator - (unsigned long long a, const big_int& b) { return big_int(a) - b; }
-big_int operator * (int a, const big_int& b) { return big_int(a) * b; }
-big_int operator * (unsigned int a, const big_int& b) { return big_int(a) * b; }
-big_int operator * (long long a, const big_int& b) { return big_int(a) * b; }
-big_int operator * (unsigned long long a, const big_int& b) { return big_int(a) * b; }
-big_int operator / (int a, const big_int& b) { return big_int(a) / b; }
-big_int operator / (unsigned int a, const big_int& b) { return big_int(a) / b; }
-big_int operator / (long long a, const big_int& b) { return big_int(a) / b; }
-big_int operator / (unsigned long long a, const big_int& b) { return big_int(a) / b; }
-big_int operator % (int a, const big_int& b) { return big_int(a) % b; }
-big_int operator % (unsigned int a, const big_int& b) { return big_int(a) % b; }
-big_int operator % (long long a, const big_int& b) { return big_int(a) % b; }
-big_int operator % (unsigned long long a, const big_int& b) { return big_int(a) % b; }
+inline big_int operator + (int a, const big_int& b) { return big_int(a) + b; }
+inline big_int operator + (unsigned int a, const big_int& b) { return big_int(a) + b; }
+inline big_int operator + (long long a, const big_int& b) { return big_int(a) + b; }
+inline big_int operator + (unsigned long long a, const big_int& b) { return big_int(a) + b; }
+inline big_int operator - (int a, const big_int& b) { return big_int(a) - b; }
+inline big_int operator - (unsigned int a, const big_int& b) { return big_int(a) - b; }
+inline big_int operator - (long long a, const big_int& b) { return big_int(a) - b; }
+inline big_int operator - (unsigned long long a, const big_int& b) { return big_int(a) - b; }
+inline big_int operator * (int a, const big_int& b) { return big_int(a) * b; }
+inline big_int operator * (unsigned int a, const big_int& b) { return big_int(a) * b; }
+inline big_int operator * (long long a, const big_int& b) { return big_int(a) * b; }
+inline big_int operator * (unsigned long long a, const big_int& b) { return big_int(a) * b; }
+inline big_int operator / (int a, const big_int& b) { return big_int(a) / b; }
+inline big_int operator / (unsigned int a, const big_int& b) { return big_int(a) / b; }
+inline big_int operator / (long long a, const big_int& b) { return big_int(a) / b; }
+inline big_int operator / (unsigned long long a, const big_int& b) { return big_int(a) / b; }
+inline big_int operator % (int a, const big_int& b) { return big_int(a) % b; }
+inline big_int operator % (unsigned int a, const big_int& b) { return big_int(a) % b; }
+inline big_int operator % (long long a, const big_int& b) { return big_int(a) % b; }
+inline big_int operator % (unsigned long long a, const big_int& b) { return big_int(a) % b; }
 
 // ================================================================== //
 // utility functions out of the class
