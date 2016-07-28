@@ -56,6 +56,13 @@
 #define per(i, a, b)          for (long long i = (long long)(b) - 1; i >= (long long)(a); --i)
 #define REP(i, n)             for (long long i = 0; i < (long long)(n); ++i)
 #define PER(i, n)             for (long long i = (long long)(n) - 1; i >= 0; --i)
+#if                           defined(__GNUC__) || defined(__GNUG__)
+#define ECH(i, c)             for (__typeof(c.begin()) i = c.begin(), e = c.end(); i != e; ++i)
+#define HCE(i, c)             for (__typeof(c.rbegin()) i = c.rbegin(), e = c.rend(); i != e; ++i)
+#else
+#define ECH(i, c)             for (auto i = c.begin(), e = c.end(); i != e; ++i)
+#define HCE(i, c)             for (auto i = c.rbegin(), e = c.rend(); i != e; ++i)
+#endif
 #define DO(n)                 for (int _iDO_ = int(n); _iDO_--;)
 #define rush()                int _CASES_; scanf("%d", &_CASES_); for (; _CASES_--;)
 #define cases()               int _CASES_; scanf("%d", &_CASES_); for (int iCase = 1; (iCase <= _CASES_ && printf("Case #%d:\n", iCase)); ++iCase)
