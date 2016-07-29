@@ -8,9 +8,14 @@
 #define __BIT_OPERATION_H__
 
 #include <cassert>
+#include <vector>
 
+
+// set the i-th(0 started) bit.
 inline int _1(int i) { assert(i < 32); return 1 << i; }
+// set rightmost i bits.
 inline int _7(int i) { assert(i < 32); return (1 << i) - 1; }
+// 64bit _1 and _7
 inline long long _1L(int i) { assert(i < 64); return 1LL << i; }
 inline long long _7L(int i) { assert(i < 64); return (1LL << i) - 1; }
 
@@ -21,12 +26,16 @@ template<typename T> inline int i_1(T x) {
 	for (int i = sizeof(T) << 2; i; i >>= 1) if (x >> i) { ret += i; x >>= i; }
 	return ret;
 }
-
-template<typename T> inline T lowbit(T x) { return x & -x; }
+// get the least siginificant bit 1 
+template<typename T> inline T lowbit(T x) { return x & (~x + 1); }
+// test the i-th(0 started) bit of x, is 1 or not.
 template<typename T> inline bool testbit(T x, int i) { return (bool)(x & (T(1) << i)); }
+// set the i-th bit, if the bit is already set, return false, else set it then return true.
 template<typename T> inline bool setbit(T& x, int i) { return (x & (T(1) << i)) ? false : (x |= (T(1) << i), true); }
+// reset the i-th bit, if the bit is already reset, return false, else reset it then return true.
 template<typename T> inline bool resetbit(T& x, int i) { return (x & (T(1) << i)) ? (x &= ~(T(1) << i), true) : false; }
 
+// count 1 bits
 template<typename T>
 inline int cntbit(T x) {
 	int len = sizeof(T) << 3;
@@ -39,6 +48,7 @@ inline int cntbit(T x) {
 	return x;
 }
 
+// reverse bit
 template<typename T>
 inline T reversebit(T x) {
 	int len = sizeof(T) << 3;
@@ -89,6 +99,42 @@ inline long long reversebit(long long x) {
 }
 
 
+// combinations and sets
+
+// traverse the sebsets of a bitset formed in integer s
+#define SUBSETS(i, s)         for (long long i = 0, _SWITCH_ = 0; _SWITCH_ ^= i == 0 ; i = (i - s) & s)
+#define rSUBSETS(i, s)        for (long long i = s, _SWITCH_ = 0; _SWITCH_ ^= i == s ; i = (i - 1) & s)
+
+// subsets of a betset formed in integer s
+template<typename T> inline std::vector<T> subsets(T s) {
+	std::vector<T> ret;
+	for (T i = 0; ; i = (i - s) & s) {
+		ret.push_back(i);
+		if (i == s) break;
+	}
+	return ret;
+}
+// Gosper's hack : to get the next higher number with the same number of 1 bits.
+template<typename T> inline bool Gosper_next(T& x) {
+	if (!x) return false;
+	unsigned long long lowbit = x & (-(long long)(x));
+	unsigned long long ripple = lowbit + x;
+	if (!ripple) return false;
+	x = ripple | (((x ^ ripple) >> 2) / lowbit);
+	return true;
+}
+
+// Gosper's hack : to get the previous lower number with the same number of 1 bits.
+template<typename T> inline bool Gosper_prev(T& x) {
+	if (!x) return false;
+	x = ~x;
+	unsigned long long lowbit = x & (-(long long)(x));
+	unsigned long long ripple = lowbit + x;
+	if (!ripple) { x = ~x; return false; }
+	x = ripple | (((x ^ ripple) >> 2) / lowbit);
+	x = ~x;
+	return true;
+}
 
 /* eof */
 #endif
