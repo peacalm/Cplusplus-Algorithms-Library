@@ -117,7 +117,7 @@ template<typename T> inline std::vector<T> subsets(T s) {
 // Gosper's hack : to get the next higher number with the same number of 1 bits.
 template<typename T> inline bool Gosper_next(T& x) {
 	if (!x) return false;
-	unsigned long long lowbit = x & (-(long long)(x));
+	unsigned long long lowbit = x & (~x + 1);
 	unsigned long long ripple = lowbit + x;
 	if (!ripple) return false;
 	x = ripple | (((x ^ ripple) >> 2) / lowbit);
@@ -128,7 +128,7 @@ template<typename T> inline bool Gosper_next(T& x) {
 template<typename T> inline bool Gosper_prev(T& x) {
 	if (!x) return false;
 	x = ~x;
-	unsigned long long lowbit = x & (-(long long)(x));
+	unsigned long long lowbit = x & (~x + 1);
 	unsigned long long ripple = lowbit + x;
 	if (!ripple) { x = ~x; return false; }
 	x = ripple | (((x ^ ripple) >> 2) / lowbit);
