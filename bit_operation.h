@@ -144,8 +144,7 @@ template<typename T> inline bool Ruskey_Williams_next(T& x) {
 	r = x & (x + 1);
 	s = r ^ (r - 1);
 	if (r != 0 && s == (T)(-1)) return false;
-	r = ((s + 1) & x) ? s : 0;
-	x = x + (x & s) - r;
+	x = x + (x & s) - (((s + 1) & x) ? s : 0);
 	return true;
 }
 /* eof */
