@@ -114,6 +114,7 @@ template<typename T> inline std::vector<T> subsets(T s) {
 	}
 	return ret;
 }
+
 // Gosper's hack : to get the next higher number with the same number of 1 bits.
 template<typename T> inline bool Gosper_next(T& x) {
 	if (!x) return false;
@@ -136,5 +137,16 @@ template<typename T> inline bool Gosper_prev(T& x) {
 	return true;
 }
 
+// Frank Ruskey, Aaron Williams, The Coolest Way to Generate Combinations
+template<typename T> inline bool Ruskey_Williams_next(T& x) {
+	if (x == 0 || x == (T)(-1)) return false;
+	T r, s;
+	r = x & (x + 1);
+	s = r ^ (r - 1);
+	if (r != 0 && s == (T)(-1)) return false;
+	r = ((s + 1) & x) ? s : 0;
+	x = x + (x & s) - r;
+	return true;
+}
 /* eof */
 #endif
