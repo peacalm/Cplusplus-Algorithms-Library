@@ -16,8 +16,8 @@
 #include <algorithm>
 #include <bitset>
 
-
-/* FUNCTION PROTOTYPES STSRT */
+// /* **************************************************************************
+//// FUNCTION PROTOTYPES STSRT
 
 // gcd, greatest common divisor
 template<typename T> T gcd(T a, T b);
@@ -34,8 +34,29 @@ template<typename T, typename ...Args> T lcm(T a, T b, Args... rest);
 // extend gcd
 template<typename T> T egcd(T a, T b, T& x, T& y);
 
+
+
+//// 3 kinds of method to get modular multiplicative inverse
+
+// modular multiplicative inverse using extend gcd, a and mod must be coprime.
+template<typename T, typename U> T minv(T a, const U mod);
+// another short modular multiplicative inverse
+// to calculate ax % mod = 1, suppose mod = pa + q, deduce:
+// pax % mod = p
+// (mod - q)x % mod = p
+// qx % mod = mod - p, so x = minv(q, mod) * (mod - p) % mod.
+// a and mod must be coprime.
+// if mod is too big, like 1e18+9 for long long type, this may overflow and get wrong answer.
+template <typename T, typename U> T minv_brief(T a, U mod);
+// modular multiplicative inverse using power(a, mod - 2, mod), mod must be prime.
+// if mod is too big, like 1e18+9 for long long type, this may overflow and get wrong answer.
+template<typename T, typename U> T minv_power(T a, U mod);
+
+
+
+
 // Euler's phi function, or Euler's totient function
-template<typename T> T Phi(T n);
+template<typename T> T phi(T n);
 
 // quick power
 template<typename T, typename U> T power(T x, U n);
@@ -100,13 +121,15 @@ template<int n, typename T> class Yanghui_triangle<n, T, -1>;
 int Josephus(int n, int k);
 
 
-/* FUNCTION PROTOTYPES END */
-/****************************************************************************/
+//// FUNCTION PROTOTYPES END
+// ************************************************************************** */
 
 
 
 
 // gcd, greatest common divisor
+#if 1
+// iterative edition
 template<typename T>
 inline T gcd(T a, T b) {
 	while (b != 0) {
@@ -116,6 +139,11 @@ inline T gcd(T a, T b) {
 	}
 	return a;
 }
+#else
+// brief recursive edition
+template<typename T> inline T gcd(T a, T b) { return b ? gcd(b, a % b) : a; }
+#endif
+
 #ifdef __cpp11
 template<typename T, typename ...Args>
 inline T gcd(T a, T b, Args... rest) {
@@ -136,6 +164,39 @@ inline T lcm(T a, T b, Args... rest) {
 #endif
 
 // extend gcd
+#if 0
+// iterative edition
+template<typename T>
+inline T egcd(T a, T b, T& x, T& y) {
+	std::stack<T> stk;
+	T gcd;
+	while (b != 0) {
+		stk.push(a);
+		T tmp = a % b;
+		a = b;
+		b = tmp;
+	}
+	gcd = a;
+	x = 1;
+	y = 0;
+	while (!stk.empty()) {
+		b = a;
+		a = stk.top();
+		stk.pop();
+		T xx = y;
+		T yy = x - (a / b) * y;
+		x = xx;
+		y = yy;
+	}
+	return gcd;
+}
+template<typename T>
+inline T minv(T a, const T mod)
+{
+	return T();
+}
+#else
+// brief recursive edition
 template<typename T>
 inline T egcd(T a, T b, T& x, T& y) {
 	if (b == 0) {
@@ -143,18 +204,53 @@ inline T egcd(T a, T b, T& x, T& y) {
 		y = 0;
 		return a;
 	}
-	T xx, yy;
-	T ret = egcd(b, a % b, xx, yy);
-	x = yy;
-	y = xx - a / b * yy;
-	return ret;
+	T gcd = egcd(b, a % b, y, x);
+	y -= (a / b) * x;
+	return gcd;
 }
+#endif
+
+//// 3 kinds of method to get modular multiplicative inverse
+
+// the best, can avoid overflow using egcd
+// modular multiplicative inverse using extend gcd, a and mod must be coprime.
+template<typename T, typename U> inline T minv(T a, const U mod) {
+	T x, y;
+	T g = egcd(a, (T)(mod), x, y);
+	assert(g == 1);
+	return (x % mod + mod) % mod;
+}
+
+// another short modular multiplicative inverse
+// to calculate ax % mod = 1, suppose mod = pa + q, deduce:
+// pax % mod = p
+// (mod - q)x % mod = p
+// qx % mod = mod - p, so x = minv(q, mod) * (mod - p) % mod.
+// a and mod must be coprime.
+// if mod is too big, like 1e18+9 for long long type, this may overflow and get wrong answer.
+template <typename T, typename U> inline T cil_minv(T a, U mod) {
+	if (a == 1) return 1;
+	return cil_minv(mod % a, mod) * (mod - mod / a) % mod;
+}
+// make sure a < mod.
+template <typename T, typename U> inline T minv_brief(T a, U mod) {
+	if (a > mod) a %= mod;
+	return cil_minv(a, mod);
+}
+
+// modular multiplicative inverse using power(a, mod - 2, mod), mod must be prime.
+// if mod is too big, like 1e18+9 for long long type, this may overflow and get wrong answer.
+template<typename T, typename U> inline T minv_power(T a, U mod) {
+	return power(a * 1LL, mod - 2, mod);
+}
+
+
 
 // Euler's phi function, or Euler's totient function
 // counts the positive integers up to a given integer n that are
 // relatively prime to n
 template<typename T>
-inline T Phi(T n) {
+inline T phi(T n) {
 	T ret = n;
 	for (T i = 2; i * 1LL * i <= n; ++i) if (n % i == 0) {
 		ret = ret / i * (i - 1);
