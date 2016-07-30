@@ -26,6 +26,7 @@ template<typename T> inline int i_1(T x) {
 	for (int i = sizeof(T) << 2; i; i >>= 1) if (x >> i) { ret += i; x >>= i; }
 	return ret;
 }
+
 // get the least siginificant bit 1 
 template<typename T> inline T lowbit(T x) { return x & (~x + 1); }
 // test the i-th(0 started) bit of x, is 1 or not.
@@ -48,7 +49,7 @@ inline int cntbit(T x) {
 	return x;
 }
 
-// reverse bit
+// reverse bits
 template<typename T>
 inline T reversebit(T x) {
 	int len = sizeof(T) << 3;
@@ -99,7 +100,7 @@ inline long long reversebit(long long x) {
 }
 
 
-// combinations and sets
+//// combinations and sets
 
 // traverse the sebsets of a bitset formed in integer s
 #define SUBSETS(i, s)         for (long long i = 0, _SWITCH_ = 0; _SWITCH_ ^= i == 0 ; i = (i - s) & s)
@@ -116,6 +117,7 @@ template<typename T> inline std::vector<T> subsets(T s) {
 }
 
 // Gosper's hack : to get the next higher number with the same number of 1 bits.
+// colex next
 template<typename T> inline bool Gosper_next(T& x) {
 	if (!x) return false;
 	unsigned long long lowbit = x & (~x + 1);
@@ -124,8 +126,7 @@ template<typename T> inline bool Gosper_next(T& x) {
 	x = ripple | (((x ^ ripple) >> 2) / lowbit);
 	return true;
 }
-
-// Gosper's hack : to get the previous lower number with the same number of 1 bits.
+// colex previous
 template<typename T> inline bool Gosper_prev(T& x) {
 	if (!x) return false;
 	x = ~x;
@@ -137,15 +138,29 @@ template<typename T> inline bool Gosper_prev(T& x) {
 	return true;
 }
 
-// Frank Ruskey, Aaron Williams, The Coolest Way to Generate Combinations
+// reference: Frank Ruskey, Aaron Williams, The Coolest Way to Generate Combinations
+// cool-lex next
 template<typename T> inline bool Ruskey_Williams_next(T& x) {
 	if (x == 0 || x == (T)(-1)) return false;
-	T r, s;
-	r = x & (x + 1);
-	s = r ^ (r - 1);
-	if (r != 0 && s == (T)(-1)) return false;
-	x = x + (x & s) - (((s + 1) & x) ? s : 0);
+	T ripple = x & (x + 1);
+	T lowmask = ripple ^ (ripple - 1);
+	if (ripple != 0 && lowmask == (T)(-1)) return false;
+	x = x + (x & lowmask) - (x & (lowmask + 1) ? lowmask : 0);
 	return true;
 }
+// cool-lex previous
+template<typename T> inline bool Ruskey_Williams_prev(T& x) {
+	if (x == 0 || x == (T)(-1)) return false;
+	T t = x | 1;
+	unsigned long long ripple = t & (t + 1);
+	if (x == t && ripple == 0) return false;
+	unsigned long long lowmask = ripple ^ (ripple - 1);
+	unsigned long long low = x & lowmask;
+	x = x - (low >> 1) + (x & 1 ? lowmask >> 1 : 0);
+	return true;
+}
+
+
+
 /* eof */
 #endif
