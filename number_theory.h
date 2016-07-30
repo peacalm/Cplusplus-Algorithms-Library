@@ -399,7 +399,7 @@ public:
 		}
 		__initialized = true;
 	}
-	static const bitset<N>& is_prime() {
+	static const std::bitset<N>& is_prime() {
 		if (!__initialized) init();
 		return __is_prime;
 	}
