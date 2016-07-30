@@ -2,7 +2,7 @@
  * big-int header.
  * written by Shuangquan Li, lishq991@gmail.com
  * created on 2016-5-7
- * last edit on 2016-7-14, add operator ++, --
+ * last edit on 2016-7-30
  */
 
 
@@ -15,10 +15,9 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
-using namespace std;
 
 class big_int {
-	static const int MAX_LEN = 25; // mutable, upper bound of big_int
+	static const int MAX_LEN = 100; // mutable, upper bound of big_int
 	static const int MOD = 10000;
 	int sign;
 	int len;
@@ -33,7 +32,7 @@ public:
 	big_int(long long);
 	big_int(unsigned long long);
 	big_int(const char *);
-	big_int(const string &);
+	big_int(const std::string &);
 	big_int(const big_int &);
 	~big_int();
 	
@@ -66,12 +65,12 @@ public:
 	int get_length() const;
 	int operator [](int i) const;
 	big_int abs() const;
-	string to_string() const;
+	std::string to_string() const;
 
 	void print();
 	void println();
-	friend istream& operator >> (istream &, big_int &);
-	friend ostream& operator << (ostream &, const big_int &);
+	friend std::istream& operator >> (std::istream &, big_int &);
+	friend std::ostream& operator << (std::ostream &, const big_int &);
 };
 typedef big_int bint;
 
@@ -145,7 +144,7 @@ inline big_int::big_int(const char *b) {
 	}
 	if (v != 0) a[len++] = v;
 }
-inline big_int::big_int(const string &b) {
+inline big_int::big_int(const std::string &b) {
 	sign = 1;
 	len = 0;
 	memset(a, 0, sizeof(a));
@@ -347,15 +346,15 @@ inline int big_int::get_sign() const { return sign; }
 inline int big_int::get_length() const { return len; }
 inline int big_int::operator [](int i) const { assert(i >= 0 && i < len); return a[i]; }
 inline big_int big_int::abs() const { return sign > 0 ? *this : -*this; }
-inline string big_int::to_string() const {
-	string ret;
+inline std::string big_int::to_string() const {
+	std::string ret;
 	if (sign == -1) ret += "-";
 	char buf[10];
 	sprintf(buf, "%d", a[len - 1]);
-	ret += string(buf);
+	ret += std::string(buf);
 	for (int i = len - 2; i >= 0; --i) {
 		sprintf(buf, "%04d", a[i]);
-		ret += string(buf);
+		ret += std::string(buf);
 	}
 	return ret;
 }
@@ -368,8 +367,8 @@ inline void big_int::print() {
 inline void big_int::println() { print(); putchar('\n'); }
 
 // friend functions, iostream
-inline istream& operator >> (istream &is, big_int &b) { string s; is >> s; b = big_int(s); return is; }
-inline ostream& operator << (ostream &os, const big_int &b) { os << b.to_string(); return os; }
+inline std::istream& operator >> (std::istream &is, big_int &b) { std::string s; is >> s; b = big_int(s); return is; }
+inline std::ostream& operator << (std::ostream &os, const big_int &b) { os << b.to_string(); return os; }
 
 // operators overwrite
 inline big_int operator + (int a, const big_int& b) { return big_int(a) + b; }
@@ -398,7 +397,7 @@ inline big_int operator % (unsigned long long a, const big_int& b) { return big_
 
 inline big_int abs(const big_int &x) { return x.get_sign() > 0 ? x : -x; }
 
-inline string to_string(const big_int &x) {
+inline std::string to_string(const big_int &x) {
 	return x.to_string();
 }
 
