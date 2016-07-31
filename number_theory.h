@@ -36,23 +36,20 @@ template<typename T> T egcd(T a, T b, T& x, T& y);
 
 
 
-//// 3 kinds of method to get modular multiplicative inverse
+//// 4 kinds of method to get modular multiplicative inverse
 
 // modular multiplicative inverse using extend gcd, a and mod must be coprime.
 template<typename T, typename U> T minv(T a, const U mod);
 // another short modular multiplicative inverse
-// to calculate ax % mod = 1, suppose mod = pa + q, deduce:
-// pax % mod = p
-// (mod - q)x % mod = p
-// qx % mod = mod - p, so x = minv(q, mod) * (mod - p) % mod.
-// a and mod must be coprime.
+// mod must be prime.
 // if mod is too big, like 1e18+9 for long long type, this may overflow and get wrong answer.
 template <typename T, typename U> T minv_brief(T a, U mod);
 // modular multiplicative inverse using power(a, mod - 2, mod), mod must be prime.
 // if mod is too big, like 1e18+9 for long long type, this may overflow and get wrong answer.
 template<typename T, typename U> T minv_power(T a, U mod);
-
-
+// modular multiplicative inverse using power(a, phi(mod) - 1, mod), (a, mod) = 1.
+// if mod is too big, like 1e18+9 for long long type, this may overflow and get wrong answer.
+template<typename T, typename U> T minv_power_phi(T a, U mod);
 
 
 // Euler's phi function, or Euler's totient function
@@ -210,7 +207,7 @@ inline T egcd(T a, T b, T& x, T& y) {
 }
 #endif
 
-//// 3 kinds of method to get modular multiplicative inverse
+//// 4 kinds of method to get modular multiplicative inverse
 
 // the best, can avoid overflow using egcd
 // modular multiplicative inverse using extend gcd, a and mod must be coprime.
@@ -221,11 +218,13 @@ template<typename T, typename U> inline T minv(T a, const U mod) {
 	return (x % mod + mod) % mod;
 }
 
-// another short modular multiplicative inverse
-// to calculate ax % mod = 1, suppose mod = pa + q, deduce:
-// pax % mod = p
-// (mod - q)x % mod = p
-// qx % mod = mod - p, so x = minv(q, mod) * (mod - p) % mod.
+// another short modular multiplicative inverse, mod must be prime
+// for any k != 0, ax = b (% mod) ==> kax = kb (% mod),
+// but only when any k != 0 and mod are prime, or (k, mod) = 1, kax = kb (% mod) ==> ax = b (% mod)
+// to calculate ax = 1 (% mod), suppose mod = pa + q, deduce:
+// pax = p (% mod)
+// (mod - q)x = p (% mod)
+// qx = mod - p (% mod), so x = minv(q, mod) * (mod - p) % mod.
 // a and mod must be coprime.
 // if mod is too big, like 1e18+9 for long long type, this may overflow and get wrong answer.
 template <typename T, typename U> inline T cil_minv(T a, U mod) {
@@ -244,6 +243,11 @@ template<typename T, typename U> inline T minv_power(T a, U mod) {
 	return power(a * 1LL, mod - 2, mod);
 }
 
+// modular multiplicative inverse using power(a, phi(mod) - 1, mod), (a, mod) = 1.
+// if mod is too big, like 1e18+9 for long long type, this may overflow and get wrong answer.
+template<typename T, typename U> inline T minv_power_phi(T a, U mod) {
+	return power(a * 1LL, phi(mod) - 1, mod);
+}
 
 
 // Euler's phi function, or Euler's totient function
