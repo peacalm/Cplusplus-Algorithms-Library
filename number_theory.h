@@ -492,7 +492,7 @@ inline void get_phi_array(int n, std::vector<bool>& is_prime, std::vector<int>& 
 			phi[i] = i - 1;
 		}
 		for (int j = 0; j < primes.size(); ++j) {
-			int t = i * primes[j];
+			long long t = 1LL * i * primes[j];
 			if (t > n) break;
 			is_prime[t] = false;
 			if (i % primes[j]) {
