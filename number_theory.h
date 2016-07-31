@@ -84,6 +84,10 @@ void get_primes(int n, std::vector<int>& primes, std::vector<bool>& is_prime);
 void get_primes(int n, std::vector<int>& primes);
 std::vector<int> get_primes(int n);
 
+// calculate phi for integer 1, 2, 3, ... , n-1.
+void get_phi_array(int n, std::vector<bool>& is_prime, std::vector<int>& primes, std::vector<int>& phi);
+std::vector<int> get_phi_array(int n);
+
 // sieve of Euler to get all prime numbers less than N
 // as well as to judge if a number less than N is prime
 template<int N> class sieve_of_Euler;
@@ -474,6 +478,39 @@ inline std::vector<int> get_primes(int n) {
 		}
 	}
 	return primes;
+}
+
+// calculate phi for integer 1, 2, 3, ... , n-1.
+inline void get_phi_array(int n, std::vector<bool>& is_prime, std::vector<int>& primes, std::vector<int>& phi) {
+	is_prime.clear(); is_prime.resize(n, true);
+	primes.clear();
+	phi.clear(); phi.resize(n);
+	phi[1] = 1;
+	for (int i = 2; i < n; ++i) {
+		if (is_prime[i]) {
+			primes.push_back(i);
+			phi[i] = i - 1;
+		}
+		for (int j = 0; j < primes.size(); ++j) {
+			int t = i * primes[j];
+			if (t > n) break;
+			is_prime[t] = false;
+			if (i % primes[j]) {
+				phi[t] = phi[i] * (primes[j] - 1);
+			}
+			else {
+				phi[t] = phi[i] * primes[j];
+				break;
+			}
+		}
+	}
+}
+inline std::vector<int> get_phi_array(int n) {
+	std::vector<bool> is_prime;
+	std::vector<int> primes;
+	std::vector<int> phi;
+	get_phi_array(n, is_prime, primes, phi);
+	return phi;
 }
 
 // sieve of Euler to get all prime numbers less than N
