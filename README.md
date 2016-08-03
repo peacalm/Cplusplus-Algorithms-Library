@@ -48,6 +48,9 @@ operator << overload for all container types and pair type.
 ## sorts.h
 different sort functions or sort related functions.
 
+## strings_and_sequences.h
+string or sequence problems, like edit distance, LIS, LCS etc.
+
 ## string_extended.h
 extended functions for string type, like split, strip etc.
 
