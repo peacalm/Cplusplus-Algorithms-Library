@@ -385,7 +385,7 @@ inline bool Miller_Rabin(unsigned int n) {
 		if (x == 1 || x == n - 1) continue;
 		// repeat r-1 times
 		for (int k = 1; k < r; ++k) {
-			x = x * x % n;
+			x = 1ULL * x * x % n;
 			if (x == 1) return false;
 			if (x == n - 1) break;
 		}
