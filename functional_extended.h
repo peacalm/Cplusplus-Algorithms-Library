@@ -1,8 +1,8 @@
 /*
-* functional-extended header.
-* written by Shuangquan Li, lishq991@gmail.com
-* created on 2016-8-6
-*/
+ * functional-extended header.
+ * written by Shuangquan Li, lishq991@gmail.com
+ * created on 2016-8-6
+ */
 
 #ifndef __FUNCTIONAL_EXTENDED_H__
 #define __FUNCTIONAL_EXTENDED_H__
