@@ -4,12 +4,92 @@
  * created on 2015-12-31
  * latest edit on 2016-5-13 add two dimension's BIT2, BIT02
  * latest edit on 2016-7-3 add modulo operations, madd, msum
+ * latest edit on 2016-8-6 add two new implements binary_indexed_tree ans binary_indexed_tree_2d.
  */
 
 #ifndef __BINERY_INDEXED_TREE_H__
 #define __BINERY_INDEXED_TREE_H__
 
+#include <cassert>
 #include <cstring>
+#include <vector>
+#include <functional>
+
+
+template<typename T, typename Operator = std::plus<T>>
+class binary_indexed_tree {
+	std::vector<T> __c;
+	Operator __op;
+	int __n;
+public:
+	binary_indexed_tree() : __n(0) {}
+	binary_indexed_tree(int n, T v = 0) { __c.resize(n, v); __n = n; }
+	void clear() { __c.clear(); __n = 0; }
+	void fill(T v) { for (int i = 0; i < __n; ++i) __c[i] = v; }
+	void resize(int n, T v = 0) { __c.clear(); __c.resize(n, v); __n = n; }
+	int size() { return __n; }
+	void add(int x, T d) {
+		for (int i = x; i < __n; i |= i + 1)
+			__c[i] = __op(__c[i], d);
+	}
+	T accu(int x) {
+		T ret;
+		if (__op(1, 0) == 1) ret = 0;
+		else if (__op(1, 1) == 1) ret = 1;
+		else if (__op(1, T(-1)) == 1) ret = T(-1);
+		else assert(0);
+		for (int i = x; i >= 0; i = (i & i + 1) - 1)
+			ret = __op(ret, __c[i]);
+		return ret;
+	}
+	T accu(int l, int r) { return accu(r) - accu(l - 1); }
+};
+
+
+template<typename T, typename Operator = std::plus<T>>
+class binary_indexed_tree_2d {
+	std::vector<std::vector<T>> __c;
+	Operator __op;
+	int __n, __m;
+public:
+	binary_indexed_tree_2d() : __n(0), __m(0) {}
+	binary_indexed_tree_2d(int n, int m, T v = 0) {
+		__c.resize(n, std::vector<T>(m, v));
+		__n = n; __m = m;
+	}
+	void clear() { __c.clear(); __n = __m = 0; }
+	void fill(T v) {
+		for (int i = 0; i < __n; ++i)
+			for (int j = 0; j < __m; ++j)
+				__c[i][j] = v;
+	}
+	void resize(int n, int m, T v = 0) {
+		__c.clear();
+		__c.resize(n, std::vector<T>(m, v));
+		__n = n; __m = m;
+	}
+	std::pair<int, int> size() { return make_pair(__n, __m); }
+	void add(int x, int y, T d) {
+		for (int i = x; i < __n; i |= i + 1)
+			for (int j = y; j < __m; j |= j + 1)
+				__c[i][j] = __op(__c[i], d);
+	}
+	T accu(int i) {
+		T ret;
+		if (__op(1, 0) == 1) ret = 0;
+		else if (__op(1, 1) == 1) ret = 1;
+		else if (__op(1, T(-1)) == 1) ret = T(-1);
+		else assert(0);
+		for (; i >= 0; i = (i & i + 1) - 1)
+			ret = __op(ret, __c[i]);
+		return ret;
+	}
+	T accu(int l, int r) { return accu(r) - accu(l - 1); }
+};
+
+
+
+
 
 // 1 << 20 == 1048576 ~== 1e6
 
