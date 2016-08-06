@@ -63,8 +63,8 @@
 #define HCE(i, c)                    for (auto i = c.rbegin(), e = c.rend(); i != e; ++i)
 #endif
 #define DO(n)                        for (int _iDO_ = int(n); _iDO_--;)
-#define rush()                       int _CASES_; scanf("%d", &_CASES_); for (; _CASES_--;)
-#define cases()                             int _CASES_; scanf("%d", &_CASES_); for (int iCase = 1; (iCase <= _CASES_ && printf("Case #%d:\n", iCase)); ++iCase)
+#define rush()                       int _CASES_; scanf("%d\n", &_CASES_); for (int iCase = 1; iCase <= _CASES_; ++iCase)
+#define cases()                      int _CASES_; scanf("%d\n", &_CASES_); for (int iCase = 1; (iCase <= _CASES_ && printf("Case #%d:\n", iCase)); ++iCase)
 #define sqr(x)                       ((x) * (x))
 #define cub(x)                       ((x) * (x) * (x))
 #define all(x)                       (x).begin(), (x).end()
