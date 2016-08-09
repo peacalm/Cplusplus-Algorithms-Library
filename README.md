@@ -26,6 +26,9 @@ combinatorics methonds.
 ## debug_kit.h
 watch function, output variable name as well as it's value.
 
+## functinal_extended.h
+plus, subtract and multiply functional class with modulo
+
 ## geometry.h
 
 ## high_precision.h
