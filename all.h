@@ -13,6 +13,7 @@
 #include "cil_def.h"
 #include "combinatorics.h"
 #include "debug_kit.h"
+#include "functional_extended.h"
 //#include "geometry.h"
 #include "high_precision.h"
 #include "io.h"
