@@ -95,17 +95,17 @@ template<typename T> inline void WR (const T& a, const T& b, const T& c, const T
 // quick IO for any type using cin, cout
 template <typename A> inline std::istream &IN(A& a) { return std::cin >> a; }
 #ifdef __cpp11
-template <typename A, typename ...Args> inline std::istream &IN(A& a, Args&... rest) { std::cin >> a; return IN(rest...); }
+template <typename A, typename ...Args> inline std::istream& IN(A& a, Args&... rest) { std::cin >> a; return IN(rest...); }
 #else
-template <typename A, typename B> inline std::istream &IN(A& a, B& b) { return std::cin >> a >> b; }
-template <typename A, typename B, typename C> inline std::istream &IN(A& a, B& b, C& c) { return std::cin >> a >> b >> c; }
-template <typename A, typename B, typename C, typename D> inline std::istream &IN(A& a, B& b, C& c, D& d) { return std::cin >> a >> b >> c >> d; }
-template <typename A, typename B, typename C, typename D, typename E> inline std::istream &IN(A& a, B& b, C& c, D& d, E& e) { return std::cin >> a >> b >> c >> d >> e; }
-template <typename A, typename B, typename C, typename D, typename E, typename F> inline std::istream &IN(A& a, B& b, C& c, D& d, E& e, F& f) { return std::cin >> a >> b >> c >> d >> e >> f; }
-template <typename A, typename B, typename C, typename D, typename E, typename F, typename G> inline std::istream &IN(A& a, B& b, C& c, D& d, E& e, F& f, G& g) { return std::cin >> a >> b >> c >> d >> e >> f >> g; }
-template <typename A, typename B, typename C, typename D, typename E, typename F, typename G, typename H> inline std::istream &IN(A& a, B& b, C& c, D& d, E& e, F& f, G& g, H& h) { return std::cin >> a >> b >> c >> d >> e >> f >> g >> h; }
-template <typename A, typename B, typename C, typename D, typename E, typename F, typename G, typename H, typename I> inline std::istream &IN(A& a, B& b, C& c, D& d, E& e, F& f, G& g, H& h, I& i) { return std::cin >> a >> b >> c >> d >> e >> f >> g >> h >> i; }
-template <typename A, typename B, typename C, typename D, typename E, typename F, typename G, typename H, typename I, typename J> inline std::istream &IN(A& a, B& b, C& c, D& d, E& e, F& f, G& g, H& h, I& i, J& j) { return std::cin >> a >> b >> c >> d >> e >> f >> g >> h >> i >> j; }
+template <typename A, typename B> inline std::istream& IN(A& a, B& b) { return std::cin >> a >> b; }
+template <typename A, typename B, typename C> inline std::istream& IN(A& a, B& b, C& c) { return std::cin >> a >> b >> c; }
+template <typename A, typename B, typename C, typename D> inline std::istream& IN(A& a, B& b, C& c, D& d) { return std::cin >> a >> b >> c >> d; }
+template <typename A, typename B, typename C, typename D, typename E> inline std::istream& IN(A& a, B& b, C& c, D& d, E& e) { return std::cin >> a >> b >> c >> d >> e; }
+template <typename A, typename B, typename C, typename D, typename E, typename F> inline std::istream& IN(A& a, B& b, C& c, D& d, E& e, F& f) { return std::cin >> a >> b >> c >> d >> e >> f; }
+template <typename A, typename B, typename C, typename D, typename E, typename F, typename G> inline std::istream& IN(A& a, B& b, C& c, D& d, E& e, F& f, G& g) { return std::cin >> a >> b >> c >> d >> e >> f >> g; }
+template <typename A, typename B, typename C, typename D, typename E, typename F, typename G, typename H> inline std::istream& IN(A& a, B& b, C& c, D& d, E& e, F& f, G& g, H& h) { return std::cin >> a >> b >> c >> d >> e >> f >> g >> h; }
+template <typename A, typename B, typename C, typename D, typename E, typename F, typename G, typename H, typename I> inline std::istream& IN(A& a, B& b, C& c, D& d, E& e, F& f, G& g, H& h, I& i) { return std::cin >> a >> b >> c >> d >> e >> f >> g >> h >> i; }
+template <typename A, typename B, typename C, typename D, typename E, typename F, typename G, typename H, typename I, typename J> inline std::istream& IN(A& a, B& b, C& c, D& d, E& e, F& f, G& g, H& h, I& i, J& j) { return std::cin >> a >> b >> c >> d >> e >> f >> g >> h >> i >> j; }
 #endif
 inline std::ostream& OUT() { return std::cout << std::endl; }
 #ifdef __cpp11
