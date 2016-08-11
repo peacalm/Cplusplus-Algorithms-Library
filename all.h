@@ -22,6 +22,7 @@
 #include "output_extended.h"
 #include "palindromic_tree.h"
 #include "sorts.h"
+#include "sparse_table.h"
 #include "string_extended.h"
 #include "strings_and_sequences.h"
 #include "touchable_heap.h"
