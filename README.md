@@ -51,6 +51,9 @@ operator << overload for all container types and pair type.
 ## sorts.h
 different sort functions or sort related functions.
 
+## sparse_table.h
+sparse table to solve range max, min, sum, product or specified function queries.
+
 ## strings_and_sequences.h
 string or sequence problems, like edit distance, LIS, LCS etc.
 
