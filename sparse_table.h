@@ -46,11 +46,29 @@ public:
 		}
 	}
 	// query interval [l, r]
-	T query(int l, int r) {
+	// this is for max or min query, the two interval can be overlapped. 
+	// accu get same result but this is faster;
+	T rmq(int l, int r) {
 		int d = r - l + 1;
 		int j = 0;
 		while ((1 << (j + 1)) <= d) ++j;
 		return __op(__st[l][j], __st[r - (1 << j) + 1][j]);
+	}
+	// query interval [l, r]
+	// this is for sum, product, xor sum or other queries, which the interval can not be overlapped.
+	template<typename ResultType>
+	ResultType accu(int l, int r, ResultType ret) {
+		int d = r - l + 1;
+		int j = 0;
+		while (d) {
+			if (d & 1) {
+				ret = __op(ret, __st[l][j]);
+				l += 1 << j;
+			}
+			d >>= 1;
+			++j;
+		}
+		return ret;
 	}
 	void clear() { __st.clear(); }
 	size_t size() const { return __st.size(); }
