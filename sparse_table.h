@@ -41,7 +41,7 @@ public:
 		while (true) {
 			int i = r - (1 << j);
 			if (i < 0) break;
-			__st[i].push_back(__op(st[i][j - 1], __st[i + (1 << (j - 1))][j - 1]));
+			__st[i].push_back(__op(__st[i][j - 1], __st[i + (1 << (j - 1))][j - 1]));
 			++j;
 		}
 	}
