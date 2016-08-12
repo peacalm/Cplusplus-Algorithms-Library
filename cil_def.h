@@ -82,7 +82,7 @@
 #define se                           second
 #define ms(a, b)                     memset((a), (b), sizeof(a))
 #define cp(a, b)                     memcpy((a), (b), sizeof(a))
-#define IOSS0                        std::ios::sync_with_stdio(false);cin.tie(false);
+#define IOSS0                        std::ios::sync_with_stdio(false);cin.tie(0);
 #define whatis(x)                    cout << #x << " = " << x << endl;
 #define uniqueit(v)                  (v).erase(unique((v).begin(), (v).end()), (v).end())
 #define insertlb(v, a)               (v).insert(lower_bound((v).begin(), (v).end(), (a)), (a))
