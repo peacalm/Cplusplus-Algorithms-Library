@@ -64,6 +64,26 @@ template<typename T> inline T min(const T& a, const T& b, const T& c, const T& d
 template<typename T> inline T min(const T& a, const T& b, const T& c, const T& d, const T& e, const T& f, const T& g, const T& h, const T& i) { return std::min(min(a, b, c, d, e, f, g, h), i); }
 template<typename T> inline T min(const T& a, const T& b, const T& c, const T& d, const T& e, const T& f, const T& g, const T& h, const T& i, const T& j) { return std::min(min(a, b, c, d, e, f, g, h, i), j); }
 
+// bisection
+template<typename IntegerType, typename UnaryPredicate>
+IntegerType bitsect_min(IntegerType l, IntegerType r, UnaryPredicate isok) {
+	while (l < r) {
+		IntegerType mid = (l + r) >> 1;
+		if (isok(mid)) r = mid;
+		else l = mid + 1;
+	}
+	return l;
+}
+template<typename IntegerType, typename UnaryPredicate>
+IntegerType bitsect_max(IntegerType l, IntegerType r, UnaryPredicate isok) {
+	while (l < r) {
+		IntegerType mid = (l + r + 1) >> 1;
+		if (isok(mid)) l = mid;
+		else r = mid - 1;
+	}
+	return l;
+}
+
 // date and time functions
 inline void delay_s(int x) { time_t t0 = time(0); while (time(0) < t0 + x); }
 inline void delay_ms(int x) { clock_t c0 = clock(); while (clock() < c0 + x); }
