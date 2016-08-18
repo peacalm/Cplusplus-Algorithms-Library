@@ -36,7 +36,7 @@ template<typename T, typename U> inline bool cmin(T& a, const U& b) { return a >
 template<typename T, typename U> inline T cadd(T& a, const U& b, const int mod = 1000000007) { a = (a * 1LL + b) % mod; if (a < 0) a += mod; return a; }
 template<typename T, typename U> inline T csub(T& a, const U& b, const int mod = 1000000007) { a = (a * 1LL - b) % mod; if (a < 0) a += mod; return a; }
 template<typename T, typename U> inline T cmul(T& a, const U& b, const int mod = 1000000007) { return a = (a * 1LL * b) % mod; }
-inline long long cpow(long long& x, long long k, const long long mod = 1000000007) { x %= mod; long long ret = 1; while (k > 0) { if (k & 1) ret = ret * x % mod; x = x * x % mod; k >>= 1; } return x = ret; }
+template<typename T> inline long long cpow(T& x, long long k, const long long mod = 1000000007) { x %= mod; T ret = 1; while (k > 0) { if (k & 1) ret = 1LL * ret * x % mod; x = 1LL * x * x % mod; k >>= 1; } return x = ret; }
 // check modulo lower bound, check modulo upper bound, check modulo lower and upper bound
 template<typename T> inline T clow(T& a, const int mod = 1000000007) { while (a < 0) a += mod; return a; }
 template<typename T> inline T cup(T& a, const int mod = 1000000007) { while (a >= mod) a -= mod; return a; }
