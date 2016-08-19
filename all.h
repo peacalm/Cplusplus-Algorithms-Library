@@ -2,7 +2,7 @@
  * cplusplus improvement library
  * written by Shuangquan Li, lishq991@gmail.com
  * created on 2015-12-1
- * last edit on 2016-7-11
+ * last edit on 2016-8-19
  */
 
 
@@ -14,7 +14,7 @@
 #include "combinatorics.h"
 #include "debug_kit.h"
 #include "functional_extended.h"
-//#include "geometry.h"
+#include "geometry.h"
 #include "high_precision.h"
 #include "io.h"
 #include "matrix.h"
