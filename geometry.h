@@ -118,9 +118,10 @@ struct __CompareHelperForGraham {
 };
 #endif
 template<typename RandomAccessIterator, typename OutputIterator>
-int Graham(RandomAccessIterator first, RandomAccessIterator last, OutputIterator output) {
-	RandomAccessIterator it = first + 1;
-	for (; it != last; ++it) if (*it < *first) swap(*first, *it);
+OutputIterator Graham(RandomAccessIterator first, RandomAccessIterator last, OutputIterator output) {
+	if (first == last) return output;
+	RandomAccessIterator it = first;
+	for (++it; it != last; ++it) if (*it < *first) swap(*first, *it);
 	typedef typename std::iterator_traits<RandomAccessIterator>::value_type value_type;
 #ifdef __cpp11
 	auto cmp = [&](const value_type& a, const value_type& b) {
@@ -130,20 +131,25 @@ int Graham(RandomAccessIterator first, RandomAccessIterator last, OutputIterator
 	__CompareHelperForGraham<value_type> cmp(*first);
 #endif
 	std::sort(first + 1, last, cmp);
-	int cnt = 0;
 	it = first;
-	output[cnt++] = *it++;
+	RandomAccessIterator prev = it;
+	*output = *it++;
+	int cnt = 1;
 	while (it != last) {
-		while (cnt >= 2 && ((output[cnt - 1] - output[cnt - 2]) ^ (*it - output[cnt - 1])) <= 0) --cnt;
-		output[cnt++] = *it++;
+		while (cnt >= 2 && ((*output - *prev) ^ (*it - *output)) <= 0) {
+			--output;
+			if (--cnt != 1) --prev;
+		}
+		*++output = *it++;
+		if (++cnt != 2) ++prev;
 	}
-	return cnt;
+	return ++output;
 }
 
 // another implementation is sort all points by x, y in pair<x, y> order, then scan all points left
 // to right once to get the lower hull and scan all points right to left twice to get the upper hull.
-template<typename RandomAccessIterator, typename OutputIterator>
-int Graham2(RandomAccessIterator first, RandomAccessIterator last, OutputIterator output) {
+template<typename RandomAccessIterator, typename RandomAccessOutputIterator>
+RandomAccessOutputIterator Graham2(RandomAccessIterator first, RandomAccessIterator last, RandomAccessOutputIterator output) {
 	std::sort(first, last);
 	int cnt = 0;
 	RandomAccessIterator it = first;
@@ -158,22 +164,20 @@ int Graham2(RandomAccessIterator first, RandomAccessIterator last, OutputIterato
 		output[cnt++] = *it--;
 	}
 	while (cnt >= 2 && ((output[cnt - 1] - output[cnt - 2]) ^ (*it - output[cnt - 1])) <= 0) --cnt;
-	return cnt;
+	return output + cnt;
 }
 
 template<typename RandomAccessIterator>
 std::vector<typename std::iterator_traits<RandomAccessIterator>::value_type>
 Graham(RandomAccessIterator first, RandomAccessIterator last) {
-	std::vector<iterator_traits<RandomAccessIterator>::value_type> ret(last - first);
-	int n = Graham(first, last, ret.begin());
-	ret.resize(n);
+	std::vector<typename std::iterator_traits<RandomAccessIterator>::value_type> ret(last - first);
+	ret.erase(Graham(first, last, ret.begin()), ret.end());
 	return ret;
 }
 template<typename Container>
 Container Graham(Container& c) {
 	Container ret(c.size());
-	int n = Graham(c.begin(), c.end(), ret.begin());
-	ret.resize(n);
+	ret.erase(Graham(c.begin(), c.end(), ret.begin()), ret.end());
 	return ret;
 }
 //template<typename T> std::vector<point<T>> Graham(std::vector<point<T>>& p) {
