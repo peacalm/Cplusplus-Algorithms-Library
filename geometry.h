@@ -2,7 +2,7 @@
  * geometry header.
  * written by Shuangquan Li, lishq991@gmail.com
  * created on 2016-5-17
- * last edit on 2016-8-19
+ * last edit on 2016-8-20
  */
 
 #ifndef __GEOMETRY_H__
@@ -132,7 +132,7 @@ OutputIterator Graham(RandomAccessIterator first, RandomAccessIterator last, Out
 #endif
 	std::sort(first + 1, last, cmp);
 	it = first;
-	RandomAccessIterator prev = it;
+	OutputIterator prev = output;
 	*output = *it++;
 	int cnt = 1;
 	while (it != last) {
