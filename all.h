@@ -5,7 +5,7 @@
  * last edit on 2016-8-19
  */
 
-
+#include "algebra.h"
 #include "big_int.h"
 #include "binery_indexed_tree.h"
 #include "bit_operation.h"
