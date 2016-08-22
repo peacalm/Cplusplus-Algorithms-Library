@@ -26,6 +26,7 @@
 #include "string_extended.h"
 #include "strings_and_sequences.h"
 #include "touchable_heap.h"
+#include "treap_tree.h"
 #include "triple.h"
 #include "union_find.h"
 #include "utility.h"
