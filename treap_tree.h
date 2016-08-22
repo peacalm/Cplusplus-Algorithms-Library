@@ -7,6 +7,7 @@
 #ifndef __TREAP_TREE_H__
 #define __TREAP_TREE_H__
 
+#include <cassert>
 #include <cstdlib>
 #include <iostream>
 
@@ -23,26 +24,12 @@ struct treap_node_base {
 	size_t subtree_size;
 	treap_node_base* father, *left, *right;
 	static RandomWeightGenerator generate_weight;
-	treap_node_base(T v = 0) : val(v), weight(generate_weight()), subtree_size(1), father(0), left(0), right(0) {};
-	//virtual ~treap_node_base() {}
-	virtual void destroy() {}
+	treap_node_base(T v = 0) : val(v), weight(generate_weight()), subtree_size(1)
+		, father(0), left(0), right(0)
+	{}
 	virtual void downpush() {}
-	void print() {
-		printf("val = %d\nweight = %d\n", val, weight);
-		if (father) printf("father = %d\n", father->val);
-		else printf("father = NULL\n");
-
-		if (left) printf("left = %d\n", left->val);
-		else printf("left = NULL\n");
-
-		if (right) printf("right = %d\n", right->val);
-		else printf("right = NULL\n");
-
-		printf("subtree_size = %u\n", subtree_size);
-		OUT();
-	}
 };
-template<typename T, typename RandomWeightGenerator = default_random_weight_generator>
+template<typename T, typename RandomWeightGenerator>
 RandomWeightGenerator treap_node_base<T, RandomWeightGenerator>::generate_weight = RandomWeightGenerator();
 
 
@@ -52,8 +39,15 @@ class treap_tree {
 private:
 	TreapNode* __root;
 public:
-	treap_tree(TreapNode* r = 0) : __root(r){}
+	treap_tree(TreapNode* r = 0) : __root(r) {}
+	treap_tree(const treap_tree& tt) : __root(tt.__root) {}
+
+	void destroy() { __destroy(__root); }
+	void clear() { __destroy(__root); __root = 0; }
 	size_t size() const { return __root ? __root->subtree_size : 0; }
+	bool empty() const { return !__root; }
+	TreapNode* root() const { return __root; }
+
 	TreapNode* insert(const T& val) {
 		TreapNode* newnode = new TreapNode(val);
 		return insert(newnode);
@@ -67,13 +61,116 @@ public:
 		__rotate(newnode);
 		return newnode;
 	}
-	TreapNode* find(const T& val) {
-		return __find(__root, val);
-	}
 	void erase(const T& val) {
-		return erase(__find(__root, val));
+		TreapNode* pos;
+		while (pos = __find(__root, val))
+			__erase(pos);
 	}
 	void erase(TreapNode* node) {
+		if (!node) return;
+		__erase(node);
+	}
+	TreapNode* find(const T& val) const {
+		return __find(__root, val);
+	}
+	//{<, >=}
+	std::pair<treap_tree, treap_tree> split(const T& k) {
+		TreapNode* l, *r;
+		__split(__root, k, l, r);
+		return std::make_pair(treap_tree(l), treap_tree(r));
+	}
+	// make sure l <= r
+	treap_tree& merge(treap_tree& rhs) {
+		__root = __merge(__root, rhs.__root);
+		return *this;
+	}
+	void downpush_all() {
+		__downpush_all(__root);
+	}
+	TreapNode* max_element() const {
+		TreapNode* u = __root;
+		assert(u);
+		u->downpush();
+		while (u->right) {
+			u = u->right;
+			u->downpush();
+		}
+		return u;
+	}
+	TreapNode* min_element() const {
+		TreapNode* u = __root;
+		assert(u);
+		u->downpush();
+		while (u->left) {
+			u = u->left;
+			u->downpush();
+		}
+		return u;
+	}
+private:
+	void __destroy(TreapNode* u) {
+		if (!u) return;
+		__destroy(u->left);
+		__destroy(u->right);
+		delete u;
+	}
+	void __downpush_all(TreapNode* u) {
+		if (!u) return;
+		u->downpush();
+		__downpush_all(u->left);
+		__downpush_all(u->right);
+	}
+	TreapNode* __merge(TreapNode* l, TreapNode* r) {
+		if (!l) return r;
+		if (!r) return l;
+		l->downpush();
+		r->downpush();
+		if (l->weight < r->weight) {
+			l->subtree_size += r->subtree_size;
+			r = __merge(l->right, r);
+			l->right = r;
+			r->father = l;
+			return l;
+		}
+		else {
+			r->subtree_size += l->subtree_size;
+			l = __merge(l, r->left);
+			l->father = r;
+			r->left = l;
+			return r;
+		}
+	}
+	void __split(TreapNode* u, const T& k, TreapNode* &l, TreapNode* &r) {
+		if (!u) {
+			l = r = NULL;
+			return;
+		}
+		u->downpush();
+		if (u->val < k) {
+			__split(u->right, k, l, r);
+			if (r) u->subtree_size -= r->subtree_size;
+			u->right = l;
+			if (l) l->father = u;
+			if (r) r->father = NULL;
+			l = u;
+		}
+		else {
+			__split(u->left, k, l, r);
+			if (l) u->subtree_size -= l->subtree_size;
+			u->left = r;
+			if (r) r->father = u;
+			if(l) l->father = NULL;
+			r = u;
+		}
+	}
+	TreapNode* __find(TreapNode* u, const T& val) const {
+		if (!u) return u;
+		if (u->val < val) return __find(u->right, val);
+		if (u->val > val) return __find(u->left, val);
+		return u;
+	}
+	void __erase(TreapNode* node) {
+		node->downpush();
 		while (node->left && node->right) {
 			if (node->left->weight < node->right->weight) __right_rotate(node);
 			else __left_rotate(node);
@@ -106,40 +203,7 @@ public:
 				else node->father->right = NULL;
 			}
 		}
-		node->destroy();
 		delete node;
-	}
-	std::pair<treap_tree, treap_tree> split() {
-
-	}
-	treap_tree merge(treap_tree& l, treap_tree& r) {
-
-	}
-	void traversal() {
-		OUT("traversal, root =", __root->val);
-		dfs(__root);
-	}
-	void dfs(TreapNode *u){
-		if (!u) return;
-		dfs(u->left);
-		std::cout << u->val << " " << u->weight << std::endl;
-		u->print();
-		dfs(u->right);
-	}
-private:
-	TreapNode* __find(TreapNode* u, const T& val) {
-		if (!u) return u;
-		if (u->val < val) return __find(u->right, val);
-		if (u->val > val) return __find(u->left, val);
-		return u;
-	}
-	void __rotate(TreapNode* newnode) {
-		while (newnode->father) {
-			TreapNode* f = newnode->father;
-			if (newnode->weight >= f->weight) break;
-			if (newnode == (f->left)) __right_rotate(f);
-			else __left_rotate(f);
-		}
 	}
 	TreapNode* __insert(TreapNode* cur, TreapNode* newnode) {
 		++(cur->subtree_size);
@@ -152,11 +216,19 @@ private:
 			return newnode;
 		}
 		else {
-			if (cur->right != 0) 
+			if (cur->right != 0)
 				return __insert(cur->right, newnode);
 			cur->right = newnode;
 			newnode->father = cur;
 			return newnode;
+		}
+	}
+	void __rotate(TreapNode* newnode) {
+		while (newnode->father) {
+			TreapNode* f = newnode->father;
+			if (newnode->weight >= f->weight) break;
+			if (newnode == (f->left)) __right_rotate(f);
+			else __left_rotate(f);
 		}
 	}
 	void __left_rotate(TreapNode* f) {
@@ -195,7 +267,7 @@ private:
 			else f->father->right = l;
 		}
 		f->left = l->right;
-		if(l->right) l->right->father = f;
+		if (l->right) l->right->father = f;
 		l->right = f;
 		f->father = l;
 	}
