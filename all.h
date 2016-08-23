@@ -10,6 +10,7 @@
 #include "binery_indexed_tree.h"
 #include "bisect.h"
 #include "bit_operation.h"
+#include "bit_set.h"
 #include "cil_config.h"
 #include "cil_def.h"
 #include "combinatorics.h"
