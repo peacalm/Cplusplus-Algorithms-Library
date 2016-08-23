@@ -46,6 +46,11 @@ public:
 		c &= ~(uchar(1) << i);
 		return true;
 	}
+	void flip(size_t n) {
+		uchar&c = __bits[n >> 3];
+		size_t i = n & 7;
+		c ^= ~(uchar(1) << i);
+	}
 	void set() {
 		for (size_t i = 0; i < __bits.size(); ++i)
 			__bits[i] = 255;
@@ -53,6 +58,10 @@ public:
 	void reset() {
 		for (size_t i = 0; i < __bits.size(); ++i)
 			__bits[i] = 0;
+	}
+	void flip() {
+		for (size_t i = 0; i < __bits.size(); ++i)
+			__bits[i] ^= 255;
 	}
 	std::string to_string() const {
 		std::string ret;
