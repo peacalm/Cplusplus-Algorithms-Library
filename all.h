@@ -8,6 +8,7 @@
 #include "algebra.h"
 #include "big_int.h"
 #include "binery_indexed_tree.h"
+#include "bisect.h"
 #include "bit_operation.h"
 #include "cil_config.h"
 #include "cil_def.h"
