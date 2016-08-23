@@ -22,19 +22,25 @@ struct treap_node_base {
 	T val;
 	int weight;
 	size_t subtree_size;
-	treap_node_base* father, *left, *right;
+	// Derived struct must define DerivedStruct* father, *left, *right.
 	static RandomWeightGenerator generate_weight;
-	treap_node_base(T v = 0) : val(v), weight(generate_weight()), subtree_size(1)
-		, father(0), left(0), right(0)
-	{}
+	treap_node_base(T v = 0) : val(v), weight(generate_weight()), subtree_size(1) {}
+	treap_node_base(T v, int w) : val(v), weight(w), subtree_size(1) {}
+	virtual ~treap_node_base() {}
 	virtual void downpush() {}
 };
 template<typename T, typename RandomWeightGenerator>
 RandomWeightGenerator treap_node_base<T, RandomWeightGenerator>::generate_weight = RandomWeightGenerator();
 
+//
+template<typename T> struct default_treap_node : treap_node_base<T> {
+	default_treap_node* father, *left, *right;
+	default_treap_node(T v = 0) : treap_node_base<T>(v), father(0), left(0), right(0) {}
+	default_treap_node(T v, int w) : treap_node_base<T>(v, w), father(0), left(0), right(0) {}
+};
 
 //
-template<typename T, typename TreapNode = treap_node_base<T> >
+template<typename T, typename TreapNode = default_treap_node<T> >
 class treap_tree {
 private:
 	TreapNode* __root;
@@ -79,7 +85,7 @@ public:
 		__split(__root, k, l, r);
 		return std::make_pair(treap_tree(l), treap_tree(r));
 	}
-	// make sure l <= r
+	// caller should make sure left tree <= right tree
 	treap_tree& merge(treap_tree& rhs) {
 		__root = __merge(__root, rhs.__root);
 		return *this;
