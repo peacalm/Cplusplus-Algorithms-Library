@@ -23,9 +23,9 @@ public:
 	bit_set(const bit_set& b) : __size(b.__size), __bits(b.__bits) {}
 	void clear() { __bits.clear(); __size = 0; }
 	size_t size() const { return __size; }
-	void resize(int n) {
+	void resize(int n, bool is_set = false) {
 		__size = n;
-		__bits.assign(__size_to_vector_size(n), 0);
+		__bits.assign(__size_to_vector_size(n), is_set ? uchar(255) : 0);
 	}
 	bool test(size_t n) {
 		uchar&c = __bits[n >> 3];
