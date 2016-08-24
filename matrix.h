@@ -8,9 +8,8 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
-#if ((defined(__cplusplus) && (__cplusplus >= 201103L) || defined(_MSC_VER) && (_MSC_VER >= 1900)))
-#define __cpp11
-#endif
+
+#include "cil_config.h"
 #include <cassert>
 #include <cstring>
 #include <string>
