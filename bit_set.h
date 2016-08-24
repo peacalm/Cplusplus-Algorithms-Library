@@ -49,7 +49,7 @@ public:
 	void flip(size_t n) {
 		uchar&c = __bits[n >> 3];
 		size_t i = n & 7;
-		c ^= ~(uchar(1) << i);
+		c ^= uchar(1) << i;
 	}
 	void set() {
 		for (size_t i = 0; i < __bits.size(); ++i)
