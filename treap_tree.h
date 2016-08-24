@@ -58,6 +58,13 @@ public:
 		TreapNode* newnode = new TreapNode(val);
 		return insert(newnode);
 	}
+#ifdef __cpp11
+	template<typename ...Args>
+	TreapNode* insert(const Args&... args) {
+		TreapNode* newnode = new TreapNode(args...);
+		return insert(newnode);
+	}
+#endif
 	TreapNode* insert(TreapNode* newnode) {
 		if (!__root) {
 			__root = newnode;
