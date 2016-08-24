@@ -72,19 +72,22 @@ public:
 	void add(int x, int y, T d) {
 		for (int i = x; i < __n; i |= i + 1)
 			for (int j = y; j < __m; j |= j + 1)
-				__c[i][j] = __op(__c[i], d);
+				__c[i][j] = __op(__c[i][j], d);
 	}
-	T accu(int i) {
+	T accu(int x, int y) {
 		T ret;
 		if (__op(1, 0) == 1) ret = 0;
 		else if (__op(1, 1) == 1) ret = 1;
 		else if (__op(1, T(-1)) == 1) ret = T(-1);
 		else assert(0);
-		for (; i >= 0; i = (i & i + 1) - 1)
-			ret = __op(ret, __c[i]);
+		for (int i = x; i >= 0; i = (i & i + 1) - 1)
+			for (int j = y; j >= 0; j = (j & j + 1) - 1)
+				ret = __op(ret, __c[i][j]);
 		return ret;
 	}
-	T accu(int l, int r) { return accu(r) - accu(l - 1); }
+	T accu(int x1, int y1, int x2, int y2) { 
+		return accu(x2, y2) + accu(x1 - 1, y1 - 1) - accu(x1 - 1, y2) - accu(x2, y1 - 1);
+	}
 };
 
 
