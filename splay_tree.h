@@ -51,7 +51,9 @@ public:
 #endif
 	SplayNode* insert(SplayNode* newnode) {
 		if (!__root) return __root = newnode;
-		return __insert(__root, newnode);
+		__insert(__root, newnode);
+		__splay(newnode);
+		return newnode;
 	}
 	SplayNode* find(const T& v) const {
 		return __find(__root, v);
@@ -97,11 +99,12 @@ public:
 	}
 	// {<, >=}
 	std::pair<splay_tree, splay_tree> split(const T& v) {
-		SplayNode* r = lower_bound(v);
+		if (!__root) return std::make_pair(splay_tree(NULL), splay_tree(NULL));
+		SplayNode* r = __lower_bound(__root, v);
+		if (!r)
+			return std::make_pair(*this, splay_tree(NULL));
 		if (r == min_element())
 			return std::make_pair(splay_tree(NULL), *this);
-		if (r == max_element())
-			return std::make_pair(*this, splay_tree(NULL));
 
 		__splay(r);
 		SplayNode* l = r->left;
