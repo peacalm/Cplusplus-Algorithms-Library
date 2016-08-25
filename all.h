@@ -25,6 +25,7 @@
 #include "palindromic_tree.h"
 #include "sorts.h"
 #include "sparse_table.h"
+#include "splay_tree.h"
 #include "string_extended.h"
 #include "strings_and_sequences.h"
 #include "touchable_heap.h"
