@@ -1,5 +1,5 @@
 /*
- * utility header.
+ * bit-set header.
  * written by Shuangquan Li, lishq991@gmail.com
  * created on 2016-8-23
  */
