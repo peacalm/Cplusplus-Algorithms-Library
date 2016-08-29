@@ -27,15 +27,15 @@ template<typename A, typename B, typename C, typename D, typename E, typename F>
 // modulo add, modulo sub, modulo mul, modulo pow
 inline long long madd(long long a, long long b, const long long mod = 1000000007) { long long ret = (a + b) % mod; if (ret < 0) ret += mod; return ret; }
 inline long long msub(long long a, long long b, const long long mod = 1000000007) { long long ret = (a - b) % mod; if (ret < 0) ret += mod; return ret; }
-inline long long mmul(long long a, long long b, const long long mod = 1000000007) { return a * b % mod; }
+inline long long mmul(long long a, long long b, const long long mod = 1000000007) { return (a % mod) * (b % mod) % mod; }
 inline long long mpow(long long x, long long k, const long long mod = 1000000007) { x %= mod; long long ret = 1; while (k > 0) { if (k & 1) ret = ret * x % mod; x = x * x % mod; k >>= 1; } return ret; }
 // check max, check min
 template<typename T, typename U> inline bool cmax(T& a, const U& b) { return a < b ? a = b, true : false; }
 template<typename T, typename U> inline bool cmin(T& a, const U& b) { return a > b ? a = b, true : false; }
 // check modulo add, check modulo sub, check modulo mul, check modulo pow
-template<typename T, typename U> inline T cadd(T& a, const U& b, const int mod = 1000000007) { a = (a * 1LL + b) % mod; if (a < 0) a += mod; return a; }
-template<typename T, typename U> inline T csub(T& a, const U& b, const int mod = 1000000007) { a = (a * 1LL - b) % mod; if (a < 0) a += mod; return a; }
-template<typename T, typename U> inline T cmul(T& a, const U& b, const int mod = 1000000007) { return a = (a * 1LL * b) % mod; }
+template<typename T, typename U> inline T cadd(T& a, const U& b, const long long mod = 1000000007) { a = (a * 1LL + b) % mod; if (a < 0) a += mod; return a; }
+template<typename T, typename U> inline T csub(T& a, const U& b, const long long mod = 1000000007) { a = (a * 1LL - b) % mod; if (a < 0) a += mod; return a; }
+template<typename T, typename U> inline T cmul(T& a, const U& b, const long long mod = 1000000007) { return a = (a * 1LL * (b % mod)) % mod; }
 template<typename T> inline long long cpow(T& x, long long k, const long long mod = 1000000007) { x %= mod; T ret = 1; while (k > 0) { if (k & 1) ret = 1LL * ret * x % mod; x = 1LL * x * x % mod; k >>= 1; } return x = ret; }
 // check modulo lower bound, check modulo upper bound, check modulo lower and upper bound
 template<typename T> inline T clow(T& a, const int mod = 1000000007) { while (a < 0) a += mod; return a; }
