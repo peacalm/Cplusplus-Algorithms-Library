@@ -110,5 +110,25 @@ inline std::vector<string> split(const string &s, const char delim = ' ') {
 	return ret;
 }
 
+inline std::vector<string> split(const string& s, const char* delims = " ") {
+	std::vector<bool> isdelim(128, false);
+	while (*delims) isdelim[int(*delims++)] = true;
+
+	std::vector<string> ret;
+	int n = int(s.size());
+	int b = 0;
+	while (b < n && isdelim[s[b]]) ++b;
+	for (int i = b; i < n; ++i) {
+		if (isdelim[s[i]]) {
+			ret.push_back(s.substr(b, i - b));
+			while (i + 1 < n && isdelim[s[i + 1]]) ++i;
+			b = i + 1;
+			continue;
+		}
+		if (i == n - 1) ret.push_back(s.substr(b));
+	}
+	return ret;
+}
+
 /* eof */
 #endif
