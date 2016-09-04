@@ -110,7 +110,7 @@ inline std::vector<string> split(const string &s, const char delim = ' ') {
 	return ret;
 }
 
-inline std::vector<string> split(const string& s, const char* delims = " ") {
+inline std::vector<string> split(const string& s, const char* delims) {
 	std::vector<bool> isdelim(128, false);
 	while (*delims) isdelim[int(*delims++)] = true;
 
