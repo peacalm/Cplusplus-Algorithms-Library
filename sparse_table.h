@@ -72,7 +72,7 @@ public:
 	}
 	void clear() { __st.clear(); }
 	size_t size() const { return __st.size(); }
-	const vector<T>& operator[](int i) const { return __st[i]; }
+	const std::vector<T>& operator[] (int i) const { return __st[i]; }
 };
 
 template<typename T, typename Compare>
