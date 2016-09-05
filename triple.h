@@ -42,8 +42,8 @@ template<typename T, typename U, typename V> triple<T, U, V> make_triple(const T
 #define mt  make_triple
 typedef triple<int, int, int> TIII;
 typedef triple<long long, long long, long long> TLLL;
-typedef vector<TIII> VTIII;
-typedef vector<TLLL> VTLLL;
+typedef std::vector<TIII> VTIII;
+typedef std::vector<TLLL> VTLLL;
 
 /* eof */
 #endif
