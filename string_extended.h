@@ -6,14 +6,15 @@
 
 #ifndef __STRING_EXTENDED_H__
 #define __STRING_EXTENDED_H__
+
 #include <string>
 #include <vector>
 #include <stack>
-using std::string; 
 
 
-// calculator of string s formed by 0123456789+-*/().
-inline int calculator(string s) {
+
+// calculator of string s formed by "0123456789+-*/()" and white space.
+inline int calculator(std::string s) {
 	s += '+';
 	int n = int(s.size());
 	int ret = 0;
@@ -57,44 +58,64 @@ inline int calculator(string s) {
 	return ret;
 }
 
-
-inline bool isalpha(const string& s) {
-	for (int i = 0; i < s.size(); ++i)
+// if all chars of s are English characters, or in a-z or A-Z.
+inline bool isalpha(const std::string& s) {
+	for (size_t i = 0; i < s.size(); ++i)
 		if (!(
 			(s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z')
 			)) return false;
 	return true;
 }
-inline bool isdigit(const string& s) {
-	for (int i = 0; i < s.size(); ++i)
-		if (!(s[i] >= '0' && s[i] <= '9')) return false;
+
+// if all chars of s are decimal digit character, or in 0-9.
+inline bool isdigit(const std::string& s) {
+	for (size_t i = 0; i < s.size(); ++i)
+		if (s[i] < '0' || s[i] > '9') return false;
 	return true;
 }
 
-inline string& to_upper(string& s) {
-	for (int i = 0; i < s.size(); ++i) {
+// if all chars of s are lowercase English characters, or in a-z.
+inline bool islower(const std::string& s) {
+	for (size_t i = 0; i < s.size(); ++i)
+		if (s[i] < 'a' || s[i] > 'z') return false;
+	return true;
+}
+
+// if all chars of s are uppercase English characters, or in A-Z.
+inline bool isupper(const std::string& s) {
+	for (size_t i = 0; i < s.size(); ++i)
+		if (s[i] < 'A' || s[i] > 'Z') return false;
+	return true;
+}
+
+// convert lowercase letters in s to uppercase.
+inline std::string& to_upper(std::string& s) {
+	for (size_t i = 0; i < s.size(); ++i) {
 		if (s[i] >= 'a' && s[i] <= 'z')
 			s[i] = 'A' + (s[i] - 'a');
 	}
 	return s;
 }
 
-inline string& to_lower(string& s) {
-	for (int i = 0; i < s.size(); ++i) {
+// convert uppercase letters in s to lowercase.
+inline std::string& to_lower(std::string& s) {
+	for (size_t i = 0; i < s.size(); ++i) {
 		if (s[i] >= 'A' && s[i] <= 'Z')
 			s[i] = 'a' + (s[i] - 'A');
 	}
 	return s;
 }
 
-inline string& strip(string& s, const char delim = ' ') {
+// remove the leading and tailing chars equal to delim.
+inline std::string& strip(std::string& s, const char delim = ' ') {
 	while (s.size() && s.back() == delim) s.pop_back();
 	while (s.size() && s.front() == delim) s.erase(s.begin());
 	return s;
 }
 
-inline std::vector<string> split(const string& s, const char delim = ' ') {
-	std::vector<string> ret;
+// split string s by one delimit char
+inline std::vector<std::string> split(const std::string& s, const char delim = ' ') {
+	std::vector<std::string> ret;
 	int n = int(s.size());
 	int b = 0;
 	while (b < n && s[b] == delim) ++b;
@@ -110,11 +131,12 @@ inline std::vector<string> split(const string& s, const char delim = ' ') {
 	return ret;
 }
 
-inline std::vector<string> split(const string& s, const char* delims) {
+// split string s by many delimit chars formed in a C-style char array.
+inline std::vector<std::string> split(const std::string& s, const char* delims) {
 	std::vector<bool> isdelim(128, false);
 	while (*delims) isdelim[int(*delims++)] = true;
 
-	std::vector<string> ret;
+	std::vector<std::string> ret;
 	int n = int(s.size());
 	int b = 0;
 	while (b < n && isdelim[s[b]]) ++b;
@@ -129,6 +151,12 @@ inline std::vector<string> split(const string& s, const char* delims) {
 	}
 	return ret;
 }
+
+// split string s by many delimit chars formed in string.
+inline std::vector<std::string> split(const std::string& s, const std::string& delims) {
+	return split(s, delims.c_str());
+}
+
 
 /* eof */
 #endif
