@@ -11,7 +11,7 @@
 #include <vector>
 #include <utility>
 
-
+// solve x in equation a * x = b using Gaussian elimination method.
 inline std::vector<double> Gauss(std::vector<std::vector<double>>& a, std::vector<double>& b, const double eps = 1e-9) {
 	int n = a.size();
 	int m = a[0].size();
