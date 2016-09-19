@@ -7,7 +7,9 @@
 #ifndef __BISECT_H__
 #define __BISECT_H__
 
- // bisection
+// bisection
+
+// return the min i in [l, r] which isok(i) is true. 
 template<typename IntegerType, typename UnaryPredicate>
 IntegerType bitsect_min(IntegerType l, IntegerType r, UnaryPredicate isok) {
 	while (l < r) {
@@ -18,6 +20,7 @@ IntegerType bitsect_min(IntegerType l, IntegerType r, UnaryPredicate isok) {
 	return l;
 }
 
+// return the max i in [l, r] which isok(i) is true. 
 template<typename IntegerType, typename UnaryPredicate>
 IntegerType bitsect_max(IntegerType l, IntegerType r, UnaryPredicate isok) {
 	while (l < r) {
