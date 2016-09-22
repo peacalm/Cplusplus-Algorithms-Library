@@ -8,7 +8,6 @@
 #ifndef __FUNCTIONAL_EXTENDED_H__
 #define __FUNCTIONAL_EXTENDED_H__
 
-#include <vector>
 #include <functional>
 
 template<typename T, typename Compare = std::less<T>>
