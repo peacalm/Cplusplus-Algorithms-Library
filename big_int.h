@@ -3,6 +3,7 @@
  * written by Shuangquan Li, lishq991@gmail.com
  * created on 2016-5-7
  * last edit on 2016-7-30
+ * last edit on 2016-10-4, overwrite +,-,*,/,%,==,!=,<,>,<=,>= into friend.
  */
 
 
@@ -17,7 +18,7 @@
 #include <string>
 
 class big_int {
-	static const int MAX_LEN = 100; // mutable, upper bound of big_int
+	static const int MAX_LEN = 100; // mutable, upper bound of big_int 10^(4*MAX_LEN)
 	static const int MOD = 10000;
 	int sign;
 	int len;
@@ -27,50 +28,55 @@ class big_int {
 	big_int& left_shift();
 public:
 	big_int();
+	big_int(short);
+	big_int(unsigned short);
 	big_int(int);
 	big_int(unsigned int);
+	big_int(long);
+	big_int(unsigned long);
 	big_int(long long);
 	big_int(unsigned long long);
-	big_int(const char *);
-	big_int(const std::string &);
-	big_int(const big_int &);
+	big_int(const char*);
+	big_int(const std::string&);
+	big_int(const big_int&);
 	~big_int();
 	
-	big_int operator -() const;
-	big_int operator + (const big_int &) const;
-	big_int operator - (const big_int &) const;
-	big_int operator * (const big_int &) const;
-	big_int operator / (const big_int &) const;
-	big_int operator % (const big_int &) const;
-	big_int& operator = (const big_int &);
-	big_int& operator += (const big_int &);
-	big_int& operator -= (const big_int &);
-	big_int& operator *= (const big_int &);
-	big_int& operator /= (const big_int &);
-	big_int& operator %= (const big_int &);
-	big_int& operator ++();
-	big_int& operator --();
-	big_int operator ++(int);
-	big_int operator --(int);
+	big_int operator - () const;
+	big_int& operator ++ ();
+	big_int& operator -- ();
+	big_int operator ++ (int);
+	big_int operator -- (int);
 
-	bool operator == (const big_int &) const;
-	bool operator != (const big_int &) const;
-	bool operator < (const big_int &) const;
-	bool operator <= (const big_int &) const;
-	bool operator > (const big_int &) const;
-	bool operator >= (const big_int &) const;
+	friend const big_int operator + (const big_int&, const big_int&);
+	friend const big_int operator - (const big_int&, const big_int&);
+	friend const big_int operator * (const big_int&, const big_int&);
+	friend const big_int operator / (const big_int&, const big_int&);
+	friend const big_int operator % (const big_int&, const big_int&);
+
+	big_int& operator = (const big_int&);
+	big_int& operator += (const big_int&);
+	big_int& operator -= (const big_int&);
+	big_int& operator *= (const big_int&);
+	big_int& operator /= (const big_int&);
+	big_int& operator %= (const big_int&);
+
+	friend bool operator == (const big_int&, const big_int&);
+	friend bool operator != (const big_int&, const big_int&);
+	friend bool operator < (const big_int&, const big_int&);
+	friend bool operator <= (const big_int&, const big_int&);
+	friend bool operator > (const big_int&, const big_int&);
+	friend bool operator >= (const big_int&, const big_int&);
 
 	void clear();
+	big_int& reverse();
 	int get_sign() const;
 	int get_length() const;
-	int operator [](int i) const;
+	int operator [] (int i) const;
 	big_int abs() const;
 	std::string to_string() const;
 
-	void print();
-	void println();
-	friend std::istream& operator >> (std::istream &, big_int &);
-	friend std::ostream& operator << (std::ostream &, const big_int &);
+	void print() const;
+	void println() const;
 };
 typedef big_int bint;
 
@@ -78,36 +84,52 @@ typedef big_int bint;
 inline void big_int::positive_constructor(unsigned long long b){
 	sign = 1;
 	len = 0;
-	memset(a, 0, sizeof(a));
 	while (b >= MOD) {
-		a[len++] = b % MOD;
+		a[len++] = (int)(b % MOD);
 		b /= MOD;
 	}
 	a[len++] = (int)(b);
+	for (int i = len; i < MAX_LEN; ++i) a[i] = 0;
 }
 inline void big_int::negative_constructor(long long b){
 	sign = -1;
 	len = 0;
-	memset(a, 0, sizeof(a));
 	while (b <= -MOD) {
 		long long rem = b % MOD;
 		a[len++] = (int)(rem >= 0 ? rem : -rem);
 		b /= MOD;
 	}
 	a[len++] = (int)(-b);
+	for (int i = len; i < MAX_LEN; ++i) a[i] = 0;
 }
 inline big_int& big_int::left_shift() {
 	if (len == 1 && a[0] == 0) return *this;
+	assert(len < MAX_LEN);
 	for (int i = len - 1; i >= 0; --i) a[i + 1] = a[i];
 	a[0] = 0; ++len;
 	return *this;
 }
+
 // constructors
-inline big_int::big_int() :sign(1), len(1) { memset(a, 0, sizeof(a)); }
+inline big_int::big_int() : sign(1), len(1) { 
+	memset(a, 0, sizeof(a));
+}
+inline big_int::big_int(short b) {
+	b >= 0 ? positive_constructor(b) : negative_constructor(b);
+}
+inline big_int::big_int(unsigned short b) {
+	positive_constructor(b);
+}
 inline big_int::big_int(int b) {
 	b >= 0 ? positive_constructor(b) : negative_constructor(b);
 }
 inline big_int::big_int(unsigned int b) {
+	positive_constructor(b);
+}
+inline big_int::big_int(long b) {
+	b >= 0 ? positive_constructor(b) : negative_constructor(b);
+}
+inline big_int::big_int(unsigned long b) {
 	positive_constructor(b);
 }
 inline big_int::big_int(long long b) {
@@ -116,7 +138,7 @@ inline big_int::big_int(long long b) {
 inline big_int::big_int(unsigned long long b) {
 	positive_constructor(b);
 }
-inline big_int::big_int(const char *b) {
+inline big_int::big_int(const char* b) {
 	sign = 1;
 	len = 0;
 	memset(a, 0, sizeof(a));
@@ -144,7 +166,7 @@ inline big_int::big_int(const char *b) {
 	}
 	if (v != 0) a[len++] = v;
 }
-inline big_int::big_int(const std::string &b) {
+inline big_int::big_int(const std::string& b) {
 	sign = 1;
 	len = 0;
 	memset(a, 0, sizeof(a));
@@ -172,7 +194,7 @@ inline big_int::big_int(const std::string &b) {
 	}
 	if (v != 0) a[len++] = v;
 }
-inline big_int::big_int(const big_int &b) {
+inline big_int::big_int(const big_int& b) {
 	sign = b.sign;
 	len = b.len;
 	memcpy(a, b.a, sizeof(a));
@@ -180,71 +202,87 @@ inline big_int::big_int(const big_int &b) {
 inline big_int::~big_int() {}
 
 
-// arithmetic operators
-inline big_int big_int::operator -() const {
+// arithmetic operators and assignments
+inline big_int big_int::operator - () const {
 	big_int ret = *this;
 	if (ret.len == 1 && ret.a[0] == 0) { ret.sign = 1; }
 	else ret.sign *= -1;
 	return ret;
 }
-inline big_int big_int::operator + (const big_int &b) const {
-	if (sign == b.sign) {
+inline big_int& big_int::operator ++() { 
+	return *this += big_int(1);
+}
+inline big_int& big_int::operator --() { 
+	return *this -= big_int(1);
+}
+inline big_int big_int::operator ++(int) { 
+	big_int ret = *this;
+	*this += big_int(1);
+	return ret;
+}
+inline big_int big_int::operator --(int) { 
+	big_int ret = *this;
+	*this -= big_int(1);
+	return ret;
+}
+inline const big_int operator + (const big_int& lhs, const big_int& rhs) {
+	if (lhs.sign == rhs.sign) {
 		big_int ret;
 		ret.len = 0;
-		ret.sign = sign;
+		ret.sign = lhs.sign;
 		int up = 0;
-		for (int i = 0; i < len || i < b.len; ++i) {
+		for (int i = 0; i < lhs.len || i < rhs.len; ++i) {
 			int sum = up;
-			if (i < len) sum += a[i];
-			if (i < b.len) sum += b.a[i];
-			up = sum / MOD;
-			sum %= MOD;
+			if (i < lhs.len) sum += lhs.a[i];
+			if (i < rhs.len) sum += rhs.a[i];
+			up = sum / lhs.MOD;
+			sum %= lhs.MOD;
 			ret.a[ret.len++] = sum;
 		}
 		if (up != 0) ret.a[ret.len++] = up;
 		return ret;
 	}
 	else {
-		if (sign == 1) return *this - (-b);
-		else return b - (-(*this));
+		if (lhs.sign == 1) return lhs - (-rhs);
+		else return rhs - (-lhs);
 	}
 }
-inline big_int big_int::operator - (const big_int &b)const {
-	if (sign == b.sign) {
-		if (sign == -1) return -((-*this) - (-b));
-		if (*this == b) return big_int(0);
-		if (*this < b) return -(b - *this);
+inline const big_int operator - (const big_int& lhs, const big_int& rhs) {
+	if (lhs.sign == rhs.sign) {
+		if (lhs.sign == -1) return -((-lhs) - (-rhs));
+		if (lhs == rhs) return big_int(0);
+		if (lhs < rhs) return -(rhs - lhs);
 		
 		big_int ret;
 		ret.len = 0;
 		int up = 0;
-		for (int i = 0; i < len; ++i) {
-			int diff = a[i] - up;
+		for (int i = 0; i < lhs.len; ++i) {
+			int diff = lhs.a[i] - up;
 			up = 0;
-			if (i < b.len) diff -= b.a[i];
-			if (diff < 0) { diff += MOD; ++up; }
+			if (i < rhs.len) diff -= rhs.a[i];
+			if (diff < 0) { diff += lhs.MOD; ++up; }
 			ret.a[ret.len++] = diff;
 		}
 		while (ret.len > 1 && ret.a[ret.len - 1] == 0) --ret.len;
 		return ret;
 	}
 	else {
-		if (sign == 1) return *this + (-b);
-		else return -((-(*this)) + b);
+		if (lhs.sign == 1) return lhs + (-rhs);
+		else return -((-lhs) + rhs);
 	}
 }
-inline big_int big_int::operator * (const big_int &b)const {
-	if (b.len == 1 && b.a[0] == 0) return big_int(0);
+inline const big_int operator * (const big_int& lhs, const big_int& rhs) {
+	if (rhs.len == 1 && rhs.a[0] == 0) return big_int(0);
 	big_int ret;
 	ret.len = 0;
-	ret.sign = sign * b.sign;
+	ret.sign = lhs.sign * rhs.sign;
 	int up = 0;
 	int i = 0, j = 0;
-	for (i = 0; i < len; ++i) {
-		for (j = 0; j < b.len; ++j) {
-			ret.a[i + j] = a[i] * b.a[j] + up + ret.a[i + j];
-			up = ret.a[i + j] / MOD;
-			ret.a[i + j] %= MOD;
+	for (i = 0; i < lhs.len; ++i) {
+		for (j = 0; j < rhs.len; ++j) {
+			ret.a[i + j] = lhs.a[i] * rhs.a[j] + up + ret.a[i + j];
+			up = ret.a[i + j] / lhs.MOD;
+			ret.a[i + j] %= lhs.MOD;
 		}
 		if (up) { ret.a[i + j] = up; up = 0; }
 	}
@@ -252,41 +290,42 @@ inline big_int big_int::operator * (const big_int &b)const {
 	while (ret.a[ret.len - 1] == 0 && ret.len > 1) --ret.len;
 	return ret;
 }
-inline big_int big_int::operator / (const big_int &b) const {
+inline const big_int operator / (const big_int& lhs, const big_int& rhs) {
 	big_int ret;
-	ret.sign = sign / b.sign;
+	ret.sign = lhs.sign / rhs.sign;
 	big_int down = 0;
-	for (int i = len - 1; i >= 0; --i) {
-		down = down.left_shift() + big_int(a[i]);
-		int l = 0, r = MOD - 1;
+	for (int i = lhs.len - 1; i >= 0; --i) {
+		down = down.left_shift() + big_int(lhs.a[i]);
+		int l = 0, r = lhs.MOD - 1;
 		while (l < r) {
 			int mid = (l + r + 1) >> 1;
-			if (b.abs() * mid > down) r = mid - 1;
+			if (rhs.abs() * mid > down) r = mid - 1;
 			else l = mid;
 		}
-		down -= b.abs() * l;
+		down -= rhs.abs() * l;
 		ret.a[i] = l;
 	}
-	ret.len = len;
+	ret.len = lhs.len;
 	while (ret.a[ret.len - 1] == 0 && ret.len > 1) --ret.len;
 	if (ret.len == 1 && ret.a[0] == 0) ret.sign = 1;
 	return ret;
 }
-inline big_int big_int::operator % (const big_int &b)const {
+inline const big_int operator % (const big_int& lhs, const big_int& rhs) {
 	big_int down;
-	for (int i = len - 1; i >= 0; --i) {
-		down = down.left_shift() + big_int(a[i]);
-		int l = 0, r = MOD - 1;
+	for (int i = lhs.len - 1; i >= 0; --i) {
+		down = down.left_shift() + big_int(lhs.a[i]);
+		int l = 0, r = lhs.MOD - 1;
 		while (l < r) {
 			int mid = (l + r + 1) >> 1;
-			if (b.abs() * mid > down) r = mid - 1;
+			if (rhs.abs() * mid > down) r = mid - 1;
 			else l = mid;
 		}
-		down -= b.abs() * l;
+		down -= rhs.abs() * l;
 	}
-	if (down != 0 && sign == -1) down.sign = -1;
+	if (down != 0 && lhs.sign == -1) down.sign = -1;
 	return down;
 }
+
 inline big_int& big_int::operator = (const big_int &b) {
 	sign = b.sign;
 	len = b.len;
@@ -309,43 +348,62 @@ inline big_int& big_int::operator %= (const big_int &b) {
 	return *this = *this % b;
 }
 
-inline big_int& big_int::operator ++() { return *this += big_int(1); }
-inline big_int& big_int::operator --() { return *this -= big_int(1); }
-inline big_int big_int::operator ++(int) { big_int ret = *this; *this += big_int(1); return ret; }
-inline big_int big_int::operator --(int) { big_int ret = *this; *this -= big_int(1); return ret; }
-
 // compare operators
-inline bool big_int::operator == (const big_int &b) const {
-	return sign == b.sign && len == b.len && !memcmp(a, b.a, sizeof(a));
+inline bool operator == (const big_int& lhs, const big_int& rhs) {
+	return lhs.sign == rhs.sign && lhs.len == rhs.len && !memcmp(lhs.a, rhs.a, sizeof(lhs.a[0]) * lhs.len);
 }
-inline bool big_int::operator != (const big_int &b) const {
-	return sign != b.sign || len != b.len || memcmp(a, b.a, sizeof(a));
+inline bool operator != (const big_int& lhs, const big_int& rhs) {
+	return lhs.sign != rhs.sign || lhs.len != rhs.len || memcmp(lhs.a, rhs.a, sizeof(lhs.a[0]) * lhs.len);
 }
-inline bool big_int::operator < (const big_int &b) const {
-	if (sign != b.sign) return sign < b.sign;
-	int reverse = sign == 1 ? 0 : 1;
+inline bool operator < (const big_int& lhs, const big_int& rhs) {
+	if (lhs.sign != rhs.sign) return lhs.sign < rhs.sign;
+	int reverse = lhs.sign == 1 ? 0 : 1;
 	int ret = -1;
-	if (len != b.len) {
-		ret = len < b.len;
+	if (lhs.len != rhs.len) {
+		ret = int(lhs.len < rhs.len);
 	}
 	else {
-		for (int i = len - 1; i >= 0; --i) if (a[i] != b.a[i]) {
-			ret = a[i] < b.a[i];
+		for (int i = lhs.len - 1; i >= 0; --i) if (lhs.a[i] != rhs.a[i]) {
+			ret = int(lhs.a[i] < rhs.a[i]);
 			break;
 		}
 	}
 	if (ret == -1) return false;
 	return bool(ret ^ reverse);
 }
-inline bool big_int::operator <= (const big_int &b) const { return *this < b || *this == b; }
-inline bool big_int::operator > (const big_int &b) const { return b < *this; }
-inline bool big_int::operator >= (const big_int &b) const { return b <= *this; }
+inline bool operator <= (const big_int& lhs, const big_int& rhs) {
+	return lhs < rhs || lhs == rhs;
+}
+inline bool operator > (const big_int& lhs, const big_int& rhs) {
+	return rhs < lhs;
+}
+inline bool operator >= (const big_int& lhs, const big_int& rhs) {
+	return rhs <= lhs;
+}
 
-inline void big_int::clear() { sign = 1; len = 1; memset(a, 0, sizeof(a));}
-inline int big_int::get_sign() const { return sign; }
-inline int big_int::get_length() const { return len; }
-inline int big_int::operator [](int i) const { assert(i >= 0 && i < len); return a[i]; }
-inline big_int big_int::abs() const { return sign > 0 ? *this : -*this; }
+// utility member functions
+inline void big_int::clear() { 
+	sign = 1;
+	len = 1;
+	memset(a, 0, sizeof(a));
+}
+inline big_int& big_int::reverse() {
+	if (len > 1 || a[0] > 0) sign *= -1;
+	return *this;
+}
+inline int big_int::get_sign() const {
+	return sign;
+}
+inline int big_int::get_length() const {
+	return len;
+}
+inline int big_int::operator [] (int i) const {
+	assert(i >= 0 && i < len);
+	return a[i];
+}
+inline big_int big_int::abs() const {
+	return sign > 0 ? *this : -*this;
+}
 inline std::string big_int::to_string() const {
 	std::string ret;
 	if (sign == -1) ret += "-";
@@ -358,42 +416,30 @@ inline std::string big_int::to_string() const {
 	}
 	return ret;
 }
-inline void big_int::print() {
+
+// input/output functions
+inline void big_int::print() const {
 	if (sign == -1) putchar('-');
 	assert(len >= 1 && len < MAX_LEN);
 	printf("%d", a[len - 1]);
 	for (int i = len - 2; i >= 0; --i) printf("%04d", a[i]);
 }
-inline void big_int::println() { print(); putchar('\n'); }
-
-// friend functions, iostream
-inline std::istream& operator >> (std::istream &is, big_int &b) { std::string s; is >> s; b = big_int(s); return is; }
-inline std::ostream& operator << (std::ostream &os, const big_int &b) { os << b.to_string(); return os; }
-
-// operators overwrite
-inline big_int operator + (int a, const big_int& b) { return big_int(a) + b; }
-inline big_int operator + (unsigned int a, const big_int& b) { return big_int(a) + b; }
-inline big_int operator + (long long a, const big_int& b) { return big_int(a) + b; }
-inline big_int operator + (unsigned long long a, const big_int& b) { return big_int(a) + b; }
-inline big_int operator - (int a, const big_int& b) { return big_int(a) - b; }
-inline big_int operator - (unsigned int a, const big_int& b) { return big_int(a) - b; }
-inline big_int operator - (long long a, const big_int& b) { return big_int(a) - b; }
-inline big_int operator - (unsigned long long a, const big_int& b) { return big_int(a) - b; }
-inline big_int operator * (int a, const big_int& b) { return big_int(a) * b; }
-inline big_int operator * (unsigned int a, const big_int& b) { return big_int(a) * b; }
-inline big_int operator * (long long a, const big_int& b) { return big_int(a) * b; }
-inline big_int operator * (unsigned long long a, const big_int& b) { return big_int(a) * b; }
-inline big_int operator / (int a, const big_int& b) { return big_int(a) / b; }
-inline big_int operator / (unsigned int a, const big_int& b) { return big_int(a) / b; }
-inline big_int operator / (long long a, const big_int& b) { return big_int(a) / b; }
-inline big_int operator / (unsigned long long a, const big_int& b) { return big_int(a) / b; }
-inline big_int operator % (int a, const big_int& b) { return big_int(a) % b; }
-inline big_int operator % (unsigned int a, const big_int& b) { return big_int(a) % b; }
-inline big_int operator % (long long a, const big_int& b) { return big_int(a) % b; }
-inline big_int operator % (unsigned long long a, const big_int& b) { return big_int(a) % b; }
+inline void big_int::println() const {
+	print(); putchar('\n');
+}
+inline std::istream& operator >> (std::istream& is, big_int& b) {
+	std::string s;
+	is >> s;
+	b = big_int(s);
+	return is;
+}
+inline std::ostream& operator << (std::ostream& os, const big_int& b) {
+	os << b.to_string();
+	return os;
+}
 
 // ================================================================== //
-// utility functions out of the class
+// utility non-member functions
 
 inline big_int abs(const big_int &x) { return x.get_sign() > 0 ? x : -x; }
 
