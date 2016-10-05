@@ -11,7 +11,7 @@
 
 // return the min i in [l, r] which isok(i) is true. 
 template<typename IntegerType, typename UnaryPredicate>
-IntegerType bitsect_min(IntegerType l, IntegerType r, UnaryPredicate isok) {
+IntegerType bisect_min(IntegerType l, IntegerType r, UnaryPredicate isok) {
 	while (l < r) {
 		IntegerType mid = (l + r) >> 1;
 		if (isok(mid)) r = mid;
@@ -22,7 +22,7 @@ IntegerType bitsect_min(IntegerType l, IntegerType r, UnaryPredicate isok) {
 
 // return the max i in [l, r] which isok(i) is true. 
 template<typename IntegerType, typename UnaryPredicate>
-IntegerType bitsect_max(IntegerType l, IntegerType r, UnaryPredicate isok) {
+IntegerType bisect_max(IntegerType l, IntegerType r, UnaryPredicate isok) {
 	while (l < r) {
 		IntegerType mid = (l + r + 1) >> 1;
 		if (isok(mid)) l = mid;
