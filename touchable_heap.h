@@ -34,9 +34,10 @@ private:
 	std::vector<value_with_eid_type> v;
 	std::map<size_type, size_type> eid2pos;
 	size_type eid_cnt;
+	Compare comp;
 	void percolate_up(size_type vid) {
 		value_with_eid_type t = v[vid];
-		for (; vid > 1 && Compare()(t.first, v[vid >> 1].first); vid >>= 1) {
+		for (; vid > 1 && comp(t.first, v[vid >> 1].first); vid >>= 1) {
 			v[vid] = v[vid >> 1];
 			eid2pos[v[vid >> 1].second] = vid;
 		}
@@ -47,10 +48,10 @@ private:
 		value_with_eid_type t = v[vid];
 		for (size_type child = 0; (vid << 1) < v.size(); vid = child) {
 			child = vid << 1;
-			if (child != v.size() - 1 && Compare()(v[child + 1].first, v[child].first)) {
+			if (child != v.size() - 1 && comp(v[child + 1].first, v[child].first)) {
 				++child;
 			}
-			if (Compare()(v[child].first, t.first)) {
+			if (comp(v[child].first, t.first)) {
 				v[vid] = v[child];
 				eid2pos[v[child].second] = vid;
 			}
@@ -62,7 +63,7 @@ private:
 		eid2pos[t.second] = vid;
 	}
 public:
-	touchable_heap() : eid_cnt(0) {
+	touchable_heap() : eid_cnt(0), comp(Compare()) {
 		v.push_back(std::make_pair(value_type(), 0));
 	}
 	touchable_heap(const std::vector<value_type>& items) {
@@ -77,15 +78,13 @@ public:
 	}
 	~touchable_heap() {}
 	void clear() {
-		v.clear();
-		v.push_back(std::make_pair(value_type(), 0));
+		v.resize(1);
 		eid2pos.clear();
 		eid_cnt = 0;
 	}
 	size_type push(const value_type& val) {
-		size_type eid = eid_cnt;
+		size_type eid = eid_cnt++;
 		v.push_back(std::make_pair(val, eid));
-		++eid_cnt;
 		percolate_up(v.size() - 1);
 		return eid;
 	}
@@ -93,23 +92,22 @@ public:
 		v.push_back(std::make_pair(val, eid));
 		percolate_up(v.size() - 1);
 	}
-	value_type pop() {
-		value_type ret = v[1].first;
-		size_type eid = v[1].second;
-		eid2pos.erase(eid);
-		v[1] = v.back();
-		v.pop_back();
-		percolate_down(1);
-		return ret;
-	}
 	value_with_eid_type pop_with_eid() {
 		value_with_eid_type ret = v[1];
 		size_type eid = v[1].second;
 		eid2pos.erase(eid);
-		v[1] = v.back();
-		v.pop_back();
-		percolate_down(1);
+		if (v.size() <= 2) {
+			v.pop_back();
+		}
+		else {
+			v[1] = v.back();
+			v.pop_back();
+			percolate_down(1);
+		}
 		return ret;
+	}
+	value_type pop() {
+		return pop_with_eid().first;
 	}
 	value_type top() const {
 		return v[1].first;
@@ -118,12 +116,14 @@ public:
 		return v[1];
 	}
 	void touch(size_type eid, value_type val) {
+		// eid not in heap, push it in
 		if (eid2pos.count(eid) == 0) {
 			push(val, eid);
 			return;
 		}
+		// modify the value of eid
 		size_type pos = eid2pos[eid];
-		if (Compare()(val, v[pos].first)) {
+		if (comp(val, v[pos].first)) {
 			v[pos].first = val;
 			percolate_up(pos);
 		}
@@ -147,12 +147,16 @@ public:
 	}
 	void erase(size_type eid) {
 		if (eid2pos.count(eid) == 0) return;
-		int pos = eid2pos[eid];
+		size_type pos = eid2pos[eid];
 		eid2pos.erase(eid);
+		if (pos == v.size() - 1) {
+			v.pop_back();
+			return;
+		}
 		v[pos] = v.back();
 		v.pop_back();
 		eid2pos[v[pos].second] = pos;
-		if (pos > 1 && Compare()(v[pos].first, v[pos >> 1].first)) {
+		if (pos > 1 && comp(v[pos].first, v[pos >> 1].first)) {
 			percolate_up(pos);
 		}
 		else {
@@ -170,6 +174,16 @@ public:
 		return *this;
 	}
 };
+
+
+template<typename T, typename Compare>
+inline std::ostream& operator << (std::ostream& os, const touchable_heap<T, Compare>& th) {
+	os << "[ ";
+	for (size_t i = 0; i < th.size(); ++i)
+		os << th[i].first << "(" << th[i].second << ") ";
+	os << "]";
+	return os;
+}
 
 /* eof */
 #endif
