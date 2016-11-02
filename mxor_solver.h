@@ -128,6 +128,7 @@ public:
 			else {
 				if (cur->child[W ^ 1]) ret += cur->child[W ^ 1]->dup;
 				if (cur->child[W]) cur = cur->child[W];
+				else break;
 			}
 		}
 		return ret;
