@@ -20,6 +20,7 @@
 #include "high_precision.h"
 #include "io.h"
 #include "matrix.h"
+#include "mxor_solver.h"
 #include "number_theory.h"
 #include "output_extended.h"
 #include "palindromic_tree.h"
