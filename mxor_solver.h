@@ -12,8 +12,8 @@
 #include <memory>
 
 // this class is designed to solve max/min xor problems, such as:
-// given a integer array A, find the max/min xor result of any of two intgers in A.
-// given a integer array A, find the number of integer pair whose xor result is
+// given an integer array A, find the max/min xor result of any of two intgers in A.
+// given an integer array A, find the number of integer pairs whose xor result is
 // greater than X(some given integer).
 
 
