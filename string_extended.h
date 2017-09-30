@@ -14,8 +14,7 @@
 
 
 // calculator of string s formed by "0123456789+-*/()" and white space.
-inline int calculator(std::string s) {
-	s += '+';
+inline int calculator(const std::string& s) {
 	int n = int(s.size());
 	int ret = 0;
 	int last = 1;
@@ -55,6 +54,7 @@ inline int calculator(std::string s) {
 		}
 		num = 0;
 	}
+	ret += op == '*' ? last * num : last / num;
 	return ret;
 }
 
