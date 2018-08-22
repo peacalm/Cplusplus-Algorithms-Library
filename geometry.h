@@ -22,7 +22,7 @@ template<typename T> struct line {
 	line(T kk, T bb) : k(kk), b(bb) {}
 	T at(T x) const { return k * x + b; }
 	bool operator < (const line& rhs) const {
-		return k < rhs.k || k == rhs.k && b < rhs.b;
+		return k < rhs.k || (k == rhs.k && b < rhs.b);
 	}
 };
 template<typename T> std::ostream& operator<< (std::ostream& os, const line<T>& l) {
@@ -78,10 +78,10 @@ struct point {
 	double angle_degree() const { return atan2(y, x) * 180 / 3.14159265358979323846264338327950288419716939937510; }
 	bool operator == (const point& B) const { return x == B.x && y == B.y; }
 	bool operator != (const point& B) const { return x != B.x || y != B.y; }
-	bool operator < (const point& B) const { return x < B.x || x == B.x && y < B.y; }
-	bool operator > (const point& B) const { return x > B.x || x == B.x && y > B.y; }
-	bool operator <= (const point& B) const { return x < B.x || x == B.x && y <= B.y; }
-	bool operator >= (const point& B) const { return x > B.x || x == B.x && y >= B.y; }
+	bool operator < (const point& B) const { return x < B.x || (x == B.x && y < B.y); }
+	bool operator > (const point& B) const { return x > B.x || (x == B.x && y > B.y); }
+	bool operator <= (const point& B) const { return x < B.x || (x == B.x && y <= B.y); }
+	bool operator >= (const point& B) const { return x > B.x || (x == B.x && y >= B.y); }
 	point& operator = (const point& B) { x = B.x; y = B.y; return *this; }
 	point operator + (const point& B) const { return point(x + B.x, y + B.y); }
 	point operator - (const point& B) const { return point(x - B.x, y - B.y); }
@@ -268,7 +268,7 @@ template<typename T> double intersection_area(const circle<T>& o1, const circle<
 	double alpha2 = acos((d - x) / r2);
 	return alpha1 * r1 * r1 + alpha2 * r2 *r2 - d * r1 * sin(alpha1);
 }
-template<typename T> double intersection_area(const point<T>& o1, T r1, const const point<T>& o2, T r2, const double eps = 1e-9) {
+template<typename T> double intersection_area(const point<T>& o1, T r1, const point<T>& o2, T r2, const double eps = 1e-9) {
 	return intersection_area(circle<T>(o1, r1), circle<T>(o2, r2), eps);
 }
 
