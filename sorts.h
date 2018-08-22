@@ -251,7 +251,7 @@ void cil_count_inversions_while_merge_sort(RandomAccessIterator first, RandomAcc
 	value_type* tmp = new value_type[n];
 	RandomAccessIterator left = first, right = mid;
 	for (size_t i = 0; i < n; ++i) {
-		if (right == last || left != mid && !comp(*right, *left)) {
+		if (right == last || (left != mid && !comp(*right, *left))) {
 			tmp[i] = *left++;
 			cnt += right - mid;
 		}
@@ -357,7 +357,7 @@ void merge_sort(RandomAccessIterator first, RandomAccessIterator last, Compare c
 	value_type* tmp = new value_type[n];
 	RandomAccessIterator left = first, right = mid;
 	for (size_t i = 0; i < n; ++i) {
-		if (right == last || left != mid && comp(*left, *right))
+		if (right == last || (left != mid && comp(*left, *right)))
 			tmp[i] = *left++;
 		else
 			tmp[i] = *right++;
