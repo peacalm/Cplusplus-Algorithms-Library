@@ -76,7 +76,7 @@ public:
 	}
 	void erase(const T& val) {
 		TreapNode* pos;
-		while (pos = __find(__root, val))
+		while ((pos = __find(__root, val)))
 			__erase(pos);
 	}
 	void erase(TreapNode* node) {

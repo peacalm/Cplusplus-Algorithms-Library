@@ -60,7 +60,7 @@ public:
 	}
 	void erase(const T& v) {
 		SplayNode *u;
-		while (u = __find(__root, v)) erase(u);
+		while ((u = __find(__root, v))) erase(u);
 	}
 	void erase(SplayNode* u) {
 		__erase(u);
