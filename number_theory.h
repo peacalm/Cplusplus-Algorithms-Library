@@ -106,11 +106,11 @@ class factorial_and_combination;
 //	static int inv_fact(int i);
 //	static int C(int n, int m);
 
-// Yanghui triangle
-template<int n, typename T = int, int mod = -1>
-class Yanghui_triangle;
-// specialized without modulo
-template<int n, typename T> class Yanghui_triangle<n, T, -1>;
+/// Yanghui triangle
+//template<int n, typename T = int, int mod = -1>
+//class Yanghui_triangle;
+/// specialized without modulo
+//template<int n, typename T> class Yanghui_triangle<n, T, -1>;
 //public member functions
 //	Yanghui_triangle();
 //	void display();
