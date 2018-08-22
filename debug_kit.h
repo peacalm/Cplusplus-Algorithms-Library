@@ -11,6 +11,8 @@
 #define __DEBUG_KIT_H__
 
 #include "cil_config.h"
+#include "output_extended.h"
+
 #include <vector>
 #include <string>
 #include <iostream>
