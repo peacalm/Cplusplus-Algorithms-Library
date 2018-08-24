@@ -7,6 +7,10 @@
 #ifndef __IO_H__
 #define __IO_H__
 
+#ifndef __cpp11
+#include "io_cpp98.h"
+#else
+
 #include "cil_config.h"
 #include <cstdio>
 #include <iostream>
@@ -51,5 +55,6 @@ template <typename...Args> inline std::ostream& OUT(const Args&... args) { _OUT(
 #define OUTnm(a, b, c, d, e)  { for (int __i__ = b; __i__ < c; ++__i__) OUTn(a[__i__], d, e) }
 
 
+#endif  // #ifndef __cpp11
 /* eof */
 #endif
