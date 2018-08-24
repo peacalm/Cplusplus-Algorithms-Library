@@ -83,12 +83,12 @@ template<typename T> inline void _WR(const T& a, const T& b, const T& c, const T
 template<typename T> inline void WR_(const T& a, const T& b, const T& c, const T& d, const T& e, const T& f, const T& g, const T& h, const T& i, const T& j) { WR_(a, b, c, d, e, f, g, h, i); WR_(j); }
 template<typename T> inline void WR (const T& a, const T& b, const T& c, const T& d, const T& e, const T& f, const T& g, const T& h, const T& i, const T& j) { WR_(a, b, c, d, e, f, g, h, i); WR(j); }
 #endif
-#define RDn(a, l, r)          { rep(_i_, l, r) RD((a)[_i_]); }
-#define RDBn(a, l, r)         { rep(_i_, l, r) RDB((a)[_i_]); }
-#define WRn(a, l, r)          { rep(_i_, l, r - 1) WR_((a)[_i_]); if(r > 0) WR((a)[r - 1]); }
-#define RDnm(a, b, c, d, e)   { rep(__i__, b, c) RDn(a[__i__], d, e) }
-#define RDBnm(a, b, c, d, e)  { rep(__i__, b, c) RDBn(a[__i__], d, e) }
-#define WRnm(a, b, c, d, e)   { rep(__i__, b, c) WRn(a[__i__], d, e) }
+#define RDn(a, l, r)          { for (int _i_ = l; _i_ < r; ++_i_) RD((a)[_i_]); }
+#define RDBn(a, l, r)         { for (int _i_ = l; _i_ < r; ++_i_) RDB((a)[_i_]); }
+#define WRn(a, l, r)          { for (int _i_ = l; _i_ < r - 1; ++_i_) WR_((a)[_i_]); if(r > 0) WR((a)[r - 1]); }
+#define RDnm(a, b, c, d, e)   { for (int __i__ = b; __i__ < c; ++__i__) RDn(a[__i__], d, e) }
+#define RDBnm(a, b, c, d, e)  { for (int __i__ = b; __i__ < c; ++__i__) RDBn(a[__i__], d, e) }
+#define WRnm(a, b, c, d, e)   { for (int __i__ = b; __i__ < c; ++__i__) WRn(a[__i__], d, e) }
 
 
 // quick IO for any type using cin, cout
@@ -144,10 +144,10 @@ template<typename T, typename U, typename V, typename W, typename X, typename Y,
 template<typename T, typename U, typename V, typename W, typename X, typename Y, typename Z, typename A, typename B, typename C> inline std::ostream& OUT_(const T&a, const U&b, const V&c, const W&d, const X&e, const Y&f, const Z&g, const A&h, const B&i, const C&j) { OUT_(a, b, c, d, e, f, g, h, i); return OUT_(j); }
 template<typename T, typename U, typename V, typename W, typename X, typename Y, typename Z, typename A, typename B, typename C> inline std::ostream& OUT(const T&a, const U&b, const V&c, const W&d, const X&e, const Y&f, const Z&g, const A&h, const B&i, const C&j) { OUT_(a, b, c, d, e, f, g, h, i); return OUT(j); }
 #endif
-#define INn(a, b, c)          { rep(_i_, b, c) IN(a[_i_]); }
-#define INnm(a, b, c, d, e)   { rep(__i__, b, c) INn(a[__i__], d, e) }
-#define OUTn(a, l, r)         { rep(_i_, l, r - 1) OUT_((a)[_i_]); if(r > 0) OUT((a)[r - 1]); }
-#define OUTnm(a, b, c, d, e)  { rep(__i__, b, c) OUTn(a[__i__], d, e) }
+#define INn(a, l, r)          { for (int _i_ = l; _i_ < r; ++_i_) IN(a[_i_]); }
+#define INnm(a, b, c, d, e)   { for (int __i__ = b; __i__ < c; ++__i__) INn(a[__i__], d, e) }
+#define OUTn(a, l, r)         { for (int _i_ = l; _i_ < r - 1; ++_i_) OUT_((a)[_i_]); if(r > 0) OUT((a)[r - 1]); }
+#define OUTnm(a, b, c, d, e)  { for (int __i__ = b; __i__ < c; ++__i__) OUTn(a[__i__], d, e) }
 
 
 /* eof */
