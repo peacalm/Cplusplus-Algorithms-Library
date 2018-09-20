@@ -90,8 +90,18 @@ struct point {
 	T operator * (const point& B) const { return x * B.x + y * B.y; }
 	T operator ^ (const point& B) const { return x * B.y - y * B.x; }
 };
+
 template<typename T> std::ostream& operator<< (std::ostream& os, const point<T>& p) {
 	return os << "(" << p.x << ", " << p.y << ")" << std::flush;
+}
+
+namespace std {
+template<typename T>
+struct hash<point<T> > {
+	size_t operator()(const point<T> &p) const {
+		return std::hash<T>{}((std::hash<T>{}(p.x) * 19921211) ^ (std::hash<T>{}(p.y) * 2147483647));
+	}
+};
 }
 
 template<typename T> double distance(const point<T>& A, const point<T>& B) {
