@@ -30,20 +30,20 @@ public:
 
     virtual T C() const = 0;
 
-    virtual bool on_line(const point_type &p, double eps = 1e-9) const {
+    bool on_line(const point_type &p, double eps = 1e-9) const {
         return on_line(p.x(), p.y());
     }
 
     template<typename U>
-    virtual bool on_line(U x, U y, double eps = 1e-9) const {
+    bool on_line(U x, U y, double eps = 1e-9) const {
         return std::abs(A() * x + B() * y + C()) <= eps;
     }
 
-    virtual T solve_x_with_y(T y) const {
+    T solve_x_with_y(T y) const {
         return (-C() - B() * y) / A();
     }
 
-    virtual T solve_y_with_x(T x) const {
+    T solve_y_with_x(T x) const {
         return (-C() - A() * x) / B();
     }
 };
@@ -55,6 +55,9 @@ template<
         typename Point = point<T>
 >
 class line_abc : public __line_base<T, Point> {
+
+public:
+    typedef Point point_type;
 
 private:
     T __a, __b, __c;
@@ -78,6 +81,9 @@ template<
 >
 class line_kb : public __line_base<T, Point> {
 
+public:
+    typedef Point point_type;
+
 private:
     T __k, __b;
 
@@ -92,7 +98,7 @@ public:
     T C() const { return __b; }
 
     T k() const { return __k; }
-    
+
     T b() const { return __b; }
 
 };
@@ -103,6 +109,9 @@ template<
         typename Point = point<T>
 >
 class line_2p : public __line_base<T, Point> {
+
+public:
+    typedef Point point_type;
 
 private:
     point_type __pa, __pb;
@@ -125,9 +134,9 @@ public:
 
     template<typename U>
     bool on_segment(U x, U y) const {
-        if (!on_line(x, y)) return false;
-        bool x_on = (__pa.x <= x && x <= __pb.x) || (__pa.x >= x && x >= __pb.x);
-        bool y_on = (__pa.y <= y && y <= __pb.y) || (__pa.y >= y && y >= __pb.y);
+        if (!this->on_line(x, y)) return false;
+        bool x_on = (__pa.x() <= x && x <= __pb.x()) || (__pa.x() >= x && x >= __pb.x());
+        bool y_on = (__pa.y() <= y && y <= __pb.y()) || (__pa.y() >= y && y >= __pb.y());
         return x_on && y_on;
     }
 
@@ -135,6 +144,45 @@ public:
         return on_segment(p.x(), p.y());
     }
 };
+
+
+/////////////////// utils ///////////////////
+
+
+/// whether two lines are parallel.
+template<
+        typename T,
+        typename Point = point<T>
+>
+bool are_parallel(const line_2p<T, Point>& l1, const line_2p<T, Point>& l2, double eps = 1e-9) {
+    return std::abs(l1.A() * l2.B() - l1.B() * l2.A()) <= eps;
+}
+
+
+/// whether two lines have and only have one intersection point.
+/// if true, return the coordinate on reference parameters "x" and "y".
+template<
+        typename T,
+        typename Point = point<T>,
+        typename IntersectionType = double
+>
+bool intersection(const line_2p<T, Point>& l1, const line_2p<T, Point>& l2,
+                  IntersectionType& x, IntersectionType& y, double eps=1e-9) {
+    if (are_parallel(l1, l2, eps)) return false;
+    if (l1.B() == 0) {
+        x = IntersectionType(-l1.C()) / l1.A();
+        y = IntersectionType(-l2.C() - l2.A() * x) / l2.B();
+        return true;
+    }
+    if (l2.B() == 0) {
+        x = IntersectionType(-l2.C()) / l2.A();
+        y = IntersectionType(-l1.C() - l1.A() * x) / l1.B();
+        return true;
+    }
+    x = IntersectionType(l1.B() * l2.C() - l2.B() * l1.C()) / IntersectionType(l1.A() * l2.B() - l2.A() * l1.B());
+    y = IntersectionType(-x * l1.A() - l1.C()) / IntersectionType(l1.B());
+    return true;
+}
 
 
 } // namespace cil

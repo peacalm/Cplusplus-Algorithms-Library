@@ -49,14 +49,6 @@ template<typename T> std::ostream& operator<< (std::ostream& os, const point<T>&
     return os << "(" << p.x() << ", " << p.y() << ")" << std::flush;
 }
 
-namespace std {
-template<typename T>
-struct hash<point<T> > {
-    size_t operator()(const point<T>& p) const {
-        return std::hash<T>{}((std::hash<T>{}(p.x()) * 19921211) ^ (std::hash<T>{}(p.y()) * 2147483647));
-    }
-};
-} // namespace std
 
 template<typename T> double distance(const point<T>& A, const point<T>& B) {
     return sqrt((A.x() - B.x()) * (A.x() - B.x()) + (A.y() - B.y()) * (A.y() - B.y()));
@@ -67,5 +59,17 @@ template<typename T> double distance(T x1, T y1, T x2, T y2) {
 }
 
 } // namespace cil
+
+
+namespace std {
+
+template<typename T>
+struct hash<cil::point<T> > {
+    size_t operator()(const cil::point<T>& p) const {
+        return std::hash<T>{}((std::hash<T>{}(p.x()) * 19921211) ^ (std::hash<T>{}(p.y()) * 2147483647));
+    }
+};
+
+} // namespace std
 
 #endif //__GEOMETRY_POINT_H__
