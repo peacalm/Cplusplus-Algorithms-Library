@@ -200,13 +200,13 @@ bool intersection(const line_2p<T, Point>& l1, const line_2p<T, Point>& l2,
                   IntersectionType& x, IntersectionType& y, double eps=1e-9) {
     if (are_parallel(l1, l2, eps)) return false;
     if (l1.B() == 0) {
-        x = IntersectionType(-l1.C()) / l1.A();
-        y = IntersectionType(-l2.C() - l2.A() * x) / l2.B();
+        x = IntersectionType(-l1.C()) / IntersectionType(l1.A());
+        y = IntersectionType(-l2.C() - l2.A() * x) / IntersectionType(l2.B());
         return true;
     }
     if (l2.B() == 0) {
         x = IntersectionType(-l2.C()) / l2.A();
-        y = IntersectionType(-l1.C() - l1.A() * x) / l1.B();
+        y = IntersectionType(-l1.C() - l1.A() * x) / IntersectionType(l1.B());
         return true;
     }
     x = IntersectionType(l1.B() * l2.C() - l2.B() * l1.C()) / IntersectionType(l1.A() * l2.B() - l2.A() * l1.B());
