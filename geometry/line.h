@@ -30,6 +30,7 @@ public:
 
     virtual T C() const = 0;
 
+    /// whether a point lies on this line.
     bool on_line(const point_type &p, double eps = 1e-9) const {
         return on_line(p.x(), p.y());
     }
@@ -132,16 +133,17 @@ public:
 
     point_type Pb() const { return __pb; }
 
+    /// whether a point lies on the segment between Pa and Pb.
+    bool on_segment(const point_type& p) const {
+        return on_segment(p.x(), p.y());
+    }
+    
     template<typename U>
     bool on_segment(U x, U y) const {
         if (!this->on_line(x, y)) return false;
         bool x_on = (__pa.x() <= x && x <= __pb.x()) || (__pa.x() >= x && x >= __pb.x());
         bool y_on = (__pa.y() <= y && y <= __pb.y()) || (__pa.y() >= y && y >= __pb.y());
         return x_on && y_on;
-    }
-
-    bool on_segment(const point_type& p) const {
-        return on_segment(p.x(), p.y());
     }
 };
 
