@@ -23,7 +23,7 @@ public:
 	void init(ForwardIterator first, ForwardIterator last) {
 		__st.clear();
 		for (ForwardIterator it = first; it != last; ++it) {
-			vector<T> tmp;
+			std::vector<T> tmp;
 			tmp.push_back(*it);
 			__st.push_back(tmp);
 		}
