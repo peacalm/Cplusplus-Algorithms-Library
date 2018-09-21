@@ -74,6 +74,15 @@ public:
 
 };
 
+template<
+        typename T,
+        typename Point = point<T>
+>
+std::ostream& operator<<(std::ostream& os, const line_abc<T, Point>& l) {
+    os << "line_abc( " << l.A() << " * x + " << l.B() << " * y + " << l.C() << " = 0 )" << std::flush;
+    return os;
+};
+
 
 /// line_kv: y = k * x + b
 template<
@@ -103,6 +112,16 @@ public:
     T b() const { return __b; }
 
 };
+
+template<
+        typename T,
+        typename Point = point<T>
+>
+std::ostream& operator<<(std::ostream& os, const line_kb<T, Point>& l) {
+    os << "line_kb( y = " << l.k() << " * x + " << l.b()<< " )" << std::flush;
+    return os;
+};
+
 
 /// line_2p: line with 2 point (x1, y1), (x2, y2)
 template<
@@ -137,7 +156,7 @@ public:
     bool on_segment(const point_type& p) const {
         return on_segment(p.x(), p.y());
     }
-    
+
     template<typename U>
     bool on_segment(U x, U y) const {
         if (!this->on_line(x, y)) return false;
@@ -145,6 +164,15 @@ public:
         bool y_on = (__pa.y() <= y && y <= __pb.y()) || (__pa.y() >= y && y >= __pb.y());
         return x_on && y_on;
     }
+};
+
+template<
+        typename T,
+        typename Point = point<T>
+>
+std::ostream& operator<<(std::ostream& os, const line_2p<T, Point>& l) {
+    os << "line_2p( " << l.Pa() << ", " << l.Pb() << " )" << std::flush;
+    return os;
 };
 
 
