@@ -438,8 +438,15 @@ inline void get_minv_array(int minv[], int n, const int mod) {
 // sieve of Euler to get primes less than n, O(n)
 inline void get_primes(int n, std::vector<int>& primes, std::vector<bool>& is_prime) {
 	primes.clear();
+	is_prime.clear();
+	if (n <= 0) {
+		return;
+	}
+	if (n <= 2) {
+		is_prime.assign(n, false);
+		return;
+	}
 	is_prime.resize(n, true);
-	if (n <= 2) return;
 	is_prime[0] = is_prime[1] = false;
 	for (int i = 2; i < n; ++i) {
 		if (is_prime[i]) primes.push_back(i);
