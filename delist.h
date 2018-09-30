@@ -24,7 +24,7 @@ public:
     node_ptr __link1, __link2;
 public:
 
-    /// self loop as default. which one is link1 and which one is link2 could be arbitrary
+    /// Self loop as default. Which one is link1 and which one is link2 could be arbitrary.
     __delist_node(const value_type& val = value_type(),
                   const node_ptr& link1 = nullptr, const node_ptr& link2 = nullptr):
             __val(val), __link1(link1), __link2(link2) {}
@@ -166,7 +166,7 @@ public:
     typedef size_t                              size_type;
 
 private:
-    node_ptr __phead; /// link1 point to next(the first one), link2 previous(last one)
+    node_ptr __phead; /// link1 point to next(the first one), link2 previous(last one).
     size_type __size;
 
 private:
@@ -288,7 +288,7 @@ public:
         return ret;
     }
 
-    /// extend rhs int this on the end, then empty rhs. no node copied, preform in O(1) time.
+    /// Extend rhs into this on the end, then empty rhs. No node copied, but all transferred, preform in O(1) time.
     delist& extend(delist& rhs) {
         if (!rhs.__size) return *this;
         if (*this == rhs) return *this;
