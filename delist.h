@@ -322,14 +322,15 @@ public:
 
 template <typename T>
 std::ostream& operator << (std::ostream& os, const delist<T>& dl) {
+    os << "[";
     for (typename delist<T>::const_iterator it = dl.cbegin(), e = dl.cend(); it != e; ++it) {
         if (it == dl.cbegin()) {
             os << *it;
             continue;
         }
-        os << "," << *it;
+        os << ", " << *it;
     }
-    os << std::flush;
+    os << "]" << std::flush;
     return os;
 }
 
