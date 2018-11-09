@@ -36,7 +36,7 @@ public:
     typedef std::pair<value_type, time_type> value_time_pair;
 
 private:
-    typedef lru_cache<Key, std::pair<Value, Time>, Hash, Pred> __base;
+    typedef lru_cache<Key, value_time_pair, Hash, Pred> __base;
     time_type __time_out;
 
 public:
