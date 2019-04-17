@@ -73,13 +73,11 @@ public:
     }
 
     bool get(const key_type& key, value_type& value) {
-        __map_iterator map_it = __key_to_list_it.find(key);
-        if (map_it == __key_to_list_it.end()) {
-            return false;
-        }
-        value = map_it->second->second;
-        __move_to_first(map_it->second);
-        return true;
+        return __get<true>(key, value);
+    }
+
+    bool peek(const key_type& key, value_type& value) {
+        return __get<false>(key, value);
     }
 
     void remove(const key_type& key) {
@@ -112,6 +110,19 @@ public:
     }
 
 private:
+    template <bool move_to_first>
+    bool __get(const key_type& key, value_type& value) {
+        __map_iterator map_it = __key_to_list_it.find(key);
+        if (map_it == __key_to_list_it.end()) {
+            return false;
+        }
+        value = map_it->second->second;
+        if (move_to_first) {
+            __move_to_first(map_it->second);
+        }
+        return true;
+    }
+
     void __move_to_first(__list_iterator it) {
         __kv_list.splice(__kv_list.begin(), __kv_list, it);
     }
