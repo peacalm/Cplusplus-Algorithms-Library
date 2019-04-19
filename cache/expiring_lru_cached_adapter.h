@@ -131,7 +131,7 @@ public:
         catch (...) {
             got_origin_value = false;
         }
-        for (size_t i = 0; i < missed_keys.size() && i < missed_values.size(); ++i) {
+        for (size_t i = 0; i < missed_keys.size(); ++i) {
             size_t pos = missed_poses[i];
             size_t cache_id = cache_ids[pos];
             std::unique_lock<std::mutex> lk(__mtxes[cache_id]);
