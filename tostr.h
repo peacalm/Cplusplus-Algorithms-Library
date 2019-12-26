@@ -45,6 +45,12 @@ template <typename T, typename U>
 std::string tostr(const std::map<T, U>& t);
 
 template <typename T>
+std::string tostr(const std::multiset<T>& t);
+
+template <typename T, typename U>
+std::string tostr(const std::multimap<T, U>& t);
+
+template <typename T>
 std::string tostr(const std::set<T>& t);
 
 template <typename T, typename U>
@@ -146,6 +152,16 @@ template <typename T, typename U>
 std::string tostr(const std::map<T, U>& t) {
     return __item_pair_container_to_str(t.begin(), t.end(), "{", "}", ", ");
 }
+
+template <typename T>
+std::string tostr(const std::multiset<T>& t) {
+    return __item_single_container_to_str(t.begin(), t.end(), "{", "}", ", ");
+}
+
+template <typename T, typename U>
+std::string tostr(const std::multimap<T, U>& t) {
+    return __item_pair_container_to_str(t.begin(), t.end(), "{", "}", ", ");
+};
 
 template <typename T>
 std::string tostr(const std::set<T>& t) {
