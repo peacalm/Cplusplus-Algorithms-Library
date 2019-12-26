@@ -89,7 +89,7 @@ std::ostream& operator << (std::ostream& os, const std::vector<T>& v);
 template<typename T>
 std::ostream& operator << (std::ostream &os, const std::initializer_list<T>& il);
 
-// std::maps
+// std::map
 template<typename T, typename U>
 std::ostream& operator << (std::ostream& os, const std::map<T, U>& m);
 
