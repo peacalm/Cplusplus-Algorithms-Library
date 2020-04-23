@@ -52,6 +52,17 @@ inline std::vector<std::string> __split_for_watch(const std::string& s) {
 			}
 			continue;
 		}
+		if (s[i] == '<') {
+			int sum = -1;
+			subs += s[i];
+			while (sum) {
+				++i;
+				subs += s[i];
+				if (s[i] == '<') --sum;
+				if (s[i] == '>') ++sum;
+			}
+			continue;
+		}
 		if (s[i] == ',') {
 			ret.push_back(subs);
 			subs.clear();
