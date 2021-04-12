@@ -21,7 +21,7 @@ bit operations for integer types, like lowbit, setbit, resitebit, cntbit, revers
 and some combinatorics method in bits, like generate and traverse subsets or combinations.
 
 ## bit_set.h
-familiar with bitset in STL, but the longth of this is mutable.
+familiar with bitset in STL, but the length of this is mutable.
 
 ## cil_config.h
 configure to fit for all platforms and compilers.
