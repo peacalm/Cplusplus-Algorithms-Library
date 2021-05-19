@@ -116,7 +116,7 @@ public:
 
 
 
-// get vonvex hull among a lot of unoredred points.
+// get convex hull among a lot of unoredred points.
 // the first point of result is the left-down-most one, others formed in anticolckwise order.
 
 // one implementation is find the left-down-most one as an origin point, then sort others by angle
