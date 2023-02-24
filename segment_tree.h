@@ -51,7 +51,7 @@ public:
     const T& get(int idx) const { assert(idx >= 0 && idx < n_); return tree_[n_ + idx]; }
 
     // set a[idx] = v, then update tree.
-    void set(int idx, const T& v) {
+    void update(int idx, const T& v) {
         assert(idx >= 0 && idx < n_);
         idx += n_;
         tree_[idx] = v;
@@ -63,7 +63,7 @@ public:
     }
 
     // set a[idx] = op_(a[idx], v), then update tree.
-    void update(int idx, const T& v) {
+    void incr(int idx, const T& v) {
         assert(idx >= 0 && idx < n_);
         idx += n_;
         tree_[idx] = op_(tree_[idx], v);
@@ -135,7 +135,7 @@ public:
     }
 
     // set a[idx] = v, then update tree.
-    void set(int idx, const T& v) {
+    void update(int idx, const T& v) {
         assert(idx >= 0 && idx < n_);
         idx = array_idx_to_tree_idx_[idx];
         tree_[idx] = v;
@@ -147,7 +147,7 @@ public:
     }
 
     // set a[idx] = op_(a[idx], v), then update tree.
-    void update(int idx, const T& v) {
+    void incr(int idx, const T& v) {
         assert(idx >= 0 && idx < n_);
         idx = array_idx_to_tree_idx_[idx];
         tree_[idx] = op_(tree_[idx], v);
