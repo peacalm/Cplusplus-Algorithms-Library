@@ -16,11 +16,11 @@
 // Left child of index i is i*2, right child is i*2+1.
 // Leaf nodes are tree_[n_: n_*2], equal to array[0:n_] where n_ is array's 
 // size. And these leaf nodes are not necessarily on same level.
-template<typename T = int, typename Fun = std::plus<T>>
+template<typename T = int, typename Operator = std::plus<T>>
 class segment_tree {
     int n_;  // origin array's size, half of tree_'s size
     std::vector<T> tree_; // tree nodes
-    const Fun fun_{};
+    const Operator op_{};
 
 public:
     segment_tree(int n, const T& initial = T{}) : n_(n), tree_(n << 1, initial) {}
@@ -39,8 +39,8 @@ public:
         l += n_;
         r += n_;
         while (l < r) {
-            if (l & 1) ret = fun_(ret, tree_[l++]);
-            if (r & 1) ret = fun_(ret, tree_[--r]);
+            if (l & 1) ret = op_(ret, tree_[l++]);
+            if (r & 1) ret = op_(ret, tree_[--r]);
             l >>= 1;
             r >>= 1;
         }
@@ -57,31 +57,31 @@ public:
         tree_[idx] = v;
         idx >>= 1;
         while (idx > 0) {
-            tree_[idx] = fun_(tree_[idx << 1], tree_[idx << 1 | 1]);
+            tree_[idx] = op_(tree_[idx << 1], tree_[idx << 1 | 1]);
             idx >>= 1;
         }
     }
 
-    // set a[idx] = fun_(a[idx], v), then update tree.
+    // set a[idx] = op_(a[idx], v), then update tree.
     void update(int idx, const T& v) {
         assert(idx >= 0 && idx < n_);
         idx += n_;
-        tree_[idx] = fun_(tree_[idx], v);
+        tree_[idx] = op_(tree_[idx], v);
         idx >>= 1;
         while (idx > 0) {
-            tree_[idx] = fun_(tree_[idx << 1], tree_[idx << 1 | 1]);
+            tree_[idx] = op_(tree_[idx << 1], tree_[idx << 1 | 1]);
             idx >>= 1;
         }
     }
 };
 
 
-template<typename T = int, typename Fun = std::plus<T>>
+template<typename T = int, typename Operator = std::plus<T>>
 class recursive_segment_tree {
     int n_ = 0;  // origin array's size
     std::vector<T> tree_; // tree_[1] is root
     std::vector<int> array_idx_to_tree_idx_; // leaf nodes
-    const Fun fun_{};
+    const Operator op_{};
 
     // node idx, range [l, r)
     void build(int idx, int l, int r, const std::vector<T>& a) {
@@ -95,7 +95,7 @@ class recursive_segment_tree {
         int m = (l + r) >> 1;
         build(idx << 1, l, m, a);
         build(idx << 1 | 1, m, r, a);
-        tree_[idx] = fun_(tree_[idx << 1], tree_[idx << 1 | 1]);
+        tree_[idx] = op_(tree_[idx << 1], tree_[idx << 1 | 1]);
     }
 
     // query range [a, b)
@@ -105,7 +105,7 @@ class recursive_segment_tree {
         int m = (l + r) >> 1;
         auto x = query(idx << 1, l, m, a, b, initial);
         auto y = query(idx << 1 | 1, m, r, a, b, initial);
-        return fun_(x, y);
+        return op_(x, y);
     }
 public:
 
@@ -141,19 +141,19 @@ public:
         tree_[idx] = v;
         idx >>= 1;
         while (idx > 0) {
-            tree_[idx] = fun_(tree_[idx << 1], tree_[idx << 1 | 1]);
+            tree_[idx] = op_(tree_[idx << 1], tree_[idx << 1 | 1]);
             idx >>= 1;
         }
     }
 
-    // set a[idx] = fun_(a[idx], v), then update tree.
+    // set a[idx] = op_(a[idx], v), then update tree.
     void update(int idx, const T& v) {
         assert(idx >= 0 && idx < n_);
         idx = array_idx_to_tree_idx_[idx];
-        tree_[idx] = fun_(tree_[idx], v);
+        tree_[idx] = op_(tree_[idx], v);
         idx >>= 1;
         while (idx > 0) {
-            tree_[idx] = fun_(tree_[idx << 1], tree_[idx << 1 | 1]);
+            tree_[idx] = op_(tree_[idx << 1], tree_[idx << 1 | 1]);
             idx >>= 1;
         }
     }
