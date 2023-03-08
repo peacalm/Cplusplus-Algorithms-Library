@@ -135,6 +135,37 @@ inline int KMP_count_occurrence(const std::string& text, const std::string& patt
 	return cnt;
 }
 
+// LPS: Longest proper Prefix which is also Suffix
+// if p[j] doesn't match s[i], then use p[lcp[j - 1]] to match s[i] if j>0. 
+inline std::vector<int> calc_KMP_LPS(const std::string& p) {
+    std::vector<int> lps(p.size(), 0);
+    for (int i = 1, j = 0; i < p.size(); ) {
+        if (p[i] == p[j]) lps[i++] = ++j;
+        else if (j > 0) j = lps[j - 1];
+        else /* lps[i] = 0 */ ++i;
+    }
+    #if 0
+    // Optimize?
+    for (int i = 1; i < p.size(); ++i) {
+        if (p[i] == p[lps[i - 1]] && lps[i - 1] > 0) {
+            lps[i - 1] = lps[lps[i - 1] - 1];
+        }
+    }
+    #endif
+    return lps;
+}
+inline int KMP_find_by_LPS(const std::string& s, const std::string& p) {
+    std::vector<int> lps = calc_KMP_LPS(p);
+    int i = 0, j = 0;
+    while (i < s.size() && j < p.size()) {
+        if (s[i] == p[j]) ++i, ++j;
+        else if (j > 0) j = lps[j - 1];
+        else ++i;
+    }
+    if (j >= p.size()) return i - p.size();
+    return -1;
+}
+
 
 // longest palindromic subsequence
 inline int LPS(const std::string& s) {
