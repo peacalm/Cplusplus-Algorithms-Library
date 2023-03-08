@@ -95,7 +95,7 @@ inline void calc_KMP_next(const char pattern[], int n, int next[]) {
 	for (int i = 0, j = -1; i < n;) {
 		while (j >= 0 && pattern[i] != pattern[j]) j = next[j];
 		++i; ++j;
-		next[i] = pattern[i] == pattern[j] ? next[j] : j;
+		next[i] = i < n && pattern[i] == pattern[j] ? next[j] : j;
 	}
 }
 inline int KMP_count_occurrence(const char text[], int n, const char pattern[], int m) {
@@ -120,7 +120,7 @@ inline std::vector<int> calc_KMP_next(const std::string& pattern) {
 	for (int i = 0, j = -1; i < n;) {
 		while (j >= 0 && pattern[i] != pattern[j]) j = next[j];
 		++i; ++j;
-		next[i] = pattern[i] == pattern[j] ? next[j] : j;
+		next[i] = i < n && pattern[i] == pattern[j] ? next[j] : j;
 	}
 	return next;
 }
